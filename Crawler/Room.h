@@ -32,6 +32,7 @@ public:
     int getTileSize() const { return tileSize; }
     sf::Texture& getTileset() { return tileset; }
     std::vector<std::vector<sf::Sprite>>& getTiles() { return tiles; }
+    const std::vector<sf::Vector2i>& getWallPositions() const { return wallPositions; }
 
     // Mutators
     void setX(int newX) { x = newX; }
@@ -41,6 +42,7 @@ public:
             sf::Sprite& sprite = tiles[col][row];
             sprite.setTexture(tileset);
             sprite.setTextureRect(textRect);
+            sprite.setOrigin(tileSize / 2.f, tileSize / 2.f); // Add this line to set the origin
             sprite.setPosition(col * tileSize, row * tileSize);
         }
     }
@@ -62,6 +64,7 @@ public:
 
                 if (col == 0 || col == width - 1 || row == 0 || row == height - 1) { // if it's an outside tile
                     textureRect = getTextureRect(10, 1); // wall texture coordinates
+                    wallPositions.emplace_back(col, row);
                 }
                 else {
                     // Generate a random number between 0 and 99
@@ -69,6 +72,7 @@ public:
 
                     if (randomNumber < 20) { // 20% chance of being a wall tile
                         textureRect = getTextureRect(10, 1); // wall texture coordinates
+                        wallPositions.emplace_back(col, row);
                     }
                     else {
                         textureRect = getTextureRect(5, 1); // floor texture coordinates
@@ -104,4 +108,5 @@ private:
     int tileSize;
     sf::Texture tileset;
     std::vector<std::vector<sf::Sprite>> tiles;
+    std::vector<sf::Vector2i> wallPositions; // 2D vector of wall positions
 };
