@@ -153,7 +153,7 @@ int main() {
         //}
 
         // Update player
-        player.update(deltaTime);
+        player.update(room1, deltaTime);
 
         // Clear the window and draw the map and player
         window.clear();

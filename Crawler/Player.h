@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Room.h"
 class Player {
 public:
     // Constructors
@@ -38,10 +39,11 @@ public:
         health -= damage;
     }
 
-    void update(sf::Time deltaTime) {
+    void update(Room& room, sf::Time deltaTime) {
         // Calculate movement based on deltaTime
         float movementSpeed = 150.0f;
         float dx = 0, dy = 0;
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             dx = -1.0f;
             isFacingRight = false;
@@ -57,7 +59,30 @@ public:
             dy = 1.0f;
         }
 
+        float nextX = x + dx * movementSpeed * deltaTime.asSeconds();
+        float nextY = y + dy * movementSpeed * deltaTime.asSeconds();
+
+        // Check if the new position is within the outer walls
+        if (nextX < 0 ||
+            nextY < 0 ||
+            nextX + sprite.getLocalBounds().width > room.getWidth() * room.getTileSize() ||
+            nextY + sprite.getLocalBounds().height > room.getHeight() * room.getTileSize()) {
+            return; // Don't move outside the outer walls
+        }
+
+        // Check if the new position collides with any wall tiles in the room
+        for (int i = 0; i < room.getWidth(); i++) {
+            for (int j = 0; j < room.getHeight(); j++) {
+                if (room.isWallTile(i, j) && nextX + sprite.getLocalBounds().width > i * room.getTileSize() &&
+                    nextX < (i + 1) * room.getTileSize() &&
+                    nextY + sprite.getLocalBounds().height > j * room.getTileSize() && nextY < (j + 1) * room.getTileSize()) {
+                    return; // Don't move into wall tiles
+                }
+            }
+        }
+
         move(dx * movementSpeed * deltaTime.asSeconds(), dy * movementSpeed * deltaTime.asSeconds());
+
         // Update any other necessary data
 
         if (!isFacingRight) {
@@ -69,6 +94,7 @@ public:
 
         setPosition();
     }
+
 
     void draw(sf::RenderWindow& window) {
         window.draw(sprite);
