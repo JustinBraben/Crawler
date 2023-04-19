@@ -18,10 +18,10 @@ const int MAX_ROOM_SIZE = 10;
 const int MIN_ROOM_SIZE = 5;
 
 // Define player and room structs
-struct Player {
-    int x, y;
-    int health;
-};
+//struct Player {
+//    int x, y;
+//    int health;
+//};
 
 struct Room {
     int x, y;
@@ -122,55 +122,44 @@ int main() {
     sf::View view(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
     window.setView(view);
 
+    sf::Clock deltaClock;
+
     // Generate the rooms and create the map
-    std::vector<Room> rooms = generateRooms();
-    std::vector<std::vector<int>> map = createMap(rooms);
+    //std::vector<Room> rooms = generateRooms();
+    //std::vector<std::vector<int>> map = createMap(rooms);
 
     // Create the player and set their starting position
-    Player player;
-    player.x = rooms[0].x + rooms[0].width / 2;
-    player.y = rooms[0].y + rooms[0].height / 2;
-    player.health = 100;
+    Player player(200, 200, 100, "Oryx/oryx_16bit_fantasy_creatures_trans.png");
 
     // Game loop
     while (window.isOpen()) {
         // Handle events
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+        sf::Event evnt;
+        while (window.pollEvent(evnt)) {
+
+            if (evnt.type == sf::Event::Closed) {
                 window.close();
             }
         }
 
-        // Move the player
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            player.x--;
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            player.x++;
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            player.y--;
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            player.y++;
-        }
+        // Calculate delta time
+        sf::Time deltaTime = deltaClock.restart();
 
         // Check for collisions with rooms
-        for (int i = 0; i < rooms.size(); i++) {
-            if (player.x >= rooms[i].x && player.x < rooms[i].x + rooms[i].width &&
-                player.y >= rooms[i].y && player.y < rooms[i].y + rooms[i].height) {
-                // TODO: Enter room
-            }
-        }
+        //for (int i = 0; i < rooms.size(); i++) {
+        //    if (player.getX() >= rooms[i].x && player.getX() < rooms[i].x + rooms[i].width &&
+        //        player.getY() >= rooms[i].y && player.getY() < rooms[i].y + rooms[i].height) {
+        //        // TODO: Enter room
+        //    }
+        //}
+
+        // Update player
+        player.update(deltaTime);
 
         // Clear the window and draw the map and player
         window.clear();
-        drawMap(map, window);
-        sf::RectangleShape playerRect(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-        playerRect.setPosition(player.x * TILE_SIZE, player.y * TILE_SIZE);
-        playerRect.setFillColor(sf::Color::Red);
-        window.draw(playerRect);
+        //drawMap(map, window);
+        player.draw(window);
         window.display();
     }
 
