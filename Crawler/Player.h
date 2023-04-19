@@ -40,7 +40,7 @@ public:
 
     void update(sf::Time deltaTime) {
         // Calculate movement based on deltaTime
-        float movementSpeed = 100.0f;
+        float movementSpeed = 150.0f;
         float dx = 0, dy = 0;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             dx = -1.0f;
