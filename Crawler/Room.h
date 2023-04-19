@@ -2,6 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+
 class Room {
 public:
     // Constructor
@@ -17,6 +20,8 @@ public:
         tiles.resize(width);
         for (auto& tile : tiles)
             tile.resize(height);
+
+        randomizeTiles();
     }
 
     // Accessors
@@ -47,6 +52,32 @@ public:
             }
         }
     }
+
+    void randomizeTiles() {
+        std::srand(static_cast<unsigned int>(std::time(nullptr)));
+        for (int col = 0; col < width; ++col) {
+            for (int row = 0; row < height; ++row) {
+                sf::IntRect textureRect;
+
+                if (col == 0 || col == width - 1 || row == 0 || row == height - 1) { // if it's an outside tile
+                    textureRect = getTextureRect(10, 1); // wall texture coordinates
+                }
+                else {
+                    // Generate a random number between 0 and 99
+                    int randomNumber = std::rand() % 100;
+
+                    if (randomNumber < 20) { // 20% chance of being a wall tile
+                        textureRect = getTextureRect(10, 1); // wall texture coordinates
+                    }
+                    else {
+                        textureRect = getTextureRect(5, 1); // floor texture coordinates
+                    }
+                }
+                setTile(col, row, textureRect);
+            }
+        }
+    }
+
 
     // Get IntRect for tile mapping textures
     sf::IntRect getTextureRect(int x, int y) const {

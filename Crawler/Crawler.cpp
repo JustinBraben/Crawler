@@ -126,13 +126,7 @@ int main() {
 
     // Create the player and set their starting position
     Player player(200, 200, 100, "Oryx/oryx_16bit_fantasy_creatures_trans.png");
-    Room room1(0, 0, 15, 9, "Oryx/oryx_16bit_fantasy_world_trans.png", 24);
-
-    for (int i = 1; i < 4; i++) {
-        for (int j = 1; j < 4; j++) {
-            room1.setTile(i - 1, j - 1, room1.getTextureRect(i % 3 + 1, j % 3 + 1));
-        }
-    }
+    Room room1(0, 0, 25, 25, "Oryx/oryx_16bit_fantasy_world_trans.png", 24);
 
     //room1.setRoom()
 
@@ -164,8 +158,8 @@ int main() {
         // Clear the window and draw the map and player
         window.clear();
         //drawMap(map, window);
-        player.draw(window);
         room1.draw(window);
+        player.draw(window);
         window.display();
     }
 
