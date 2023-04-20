@@ -124,10 +124,18 @@ int main() {
     //std::vector<Room> rooms = generateRooms();
     //std::vector<std::vector<int>> map = createMap(rooms);
 
+    sf::Texture fantasyTileTexture;
+
+    // Load the tileset texture
+    if (!fantasyTileTexture.loadFromFile("Oryx/oryx_16bit_fantasy_world_trans.png")) {
+        std::cerr << "Failed to load tileset: " << "Oryx/oryx_16bit_fantasy_world_trans.png" << std::endl;
+        // Error handling
+    }
+
     // Create the player and set their starting position
-    Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, "Oryx/oryx_16bit_fantasy_world_trans.png", 24);
+    Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
     Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", room1);
-    Tile myTile(0.0f, 0.0f, TILE_SIZE, "Oryx/oryx_16bit_fantasy_world_trans.png", TileType::Wall);
+    Tile myTile(0.0f, 0.0f, TILE_SIZE, fantasyTileTexture, TileType::Wall);
 
     std::cout << "x coordinate for the centre is: " << myTile.getCenterLocation2f().x << " | y coordinate for the centre is: " << myTile.getCenterLocation2f().y << "\n";
 
@@ -161,7 +169,7 @@ int main() {
         // Clear the window and draw the map and player
         window.clear();
         //drawMap(map, window);
-        //room1.draw(window);
+        room1.draw(window);
         myTile.draw(window);
         player.draw(window);
         window.display();

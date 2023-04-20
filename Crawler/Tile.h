@@ -11,14 +11,11 @@ enum class TileType {
 class Tile
 {
 public:
-    Tile(float startX, float startY, int startTileSize, const std::string& tilesetPath, TileType type) :
+    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type) :
         x(startX), y(startY), tileSize(startTileSize), tileType(type) {
-        // Load the tileset texture
-        if (!tileTexture.loadFromFile(tilesetPath)) {
-            std::cerr << "Failed to load tileset: " << tilesetPath << std::endl;
-            // Error handling
-        }
-        tileSprite.setTexture(tileTexture);
+
+        // Set the tileTexture
+        tileSprite.setTexture(givenTileTexture);
 
         // Set the tile's position based on the constructor parameters, adjust based on tileSize
         setPosition(startX * tileSize, startY * tileSize);
