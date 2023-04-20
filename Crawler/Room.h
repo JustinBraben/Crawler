@@ -43,7 +43,7 @@ public:
             sf::Sprite& sprite = tiles[col][row];
             sprite.setTexture(tileset);
             sprite.setTextureRect(textRect);
-            sprite.setOrigin(tileSize / 2.f, tileSize / 2.f); // Add this line to set the origin
+            //sprite.setOrigin(tileSize / 2.f, tileSize / 2.f); // Add this line to set the origin
             sprite.setPosition(col * tileSize, row * tileSize);
         }
     }
@@ -121,6 +121,12 @@ public:
             return true;
         }
         return false;
+    }
+
+    sf::Vector2f getTileCenter(sf::Vector2i& wallPosition) {
+        float centerX = wallPosition.x + tileSize / 2;
+        float centerY = wallPosition.y + tileSize / 2;
+        return sf::Vector2f(centerX, centerY);
     }
 
     // Get IntRect for tile mapping textures

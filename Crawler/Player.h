@@ -16,50 +16,18 @@ public:
         sprite.setTexture(texture);
         sprite.setTextureRect(sf::IntRect(tileSize, tileSize, tileSize, tileSize));
 
-        // Check if the starting position collides with any wall tiles in the room
-        const float offset = static_cast<float>(tileSize / 2); // Adjust this value to change the offset
-        bool isColliding = false;
-        for (const auto& wallPos : room.getWallPositions()) {
-            if (x + sprite.getLocalBounds().width > wallPos.x * room.getTileSize() + offset &&
-                x < (wallPos.x + 1) * room.getTileSize() - offset &&
-                y + sprite.getLocalBounds().height > wallPos.y * room.getTileSize() + offset &&
-                y < (wallPos.y + 1) * room.getTileSize() - offset) {
-                isColliding = true;
-                break; // Found a wall tile that collides with the starting position
-            }
-        }
-
-        // If the starting position collides with a wall tile, nudge the player to a nearby tile
-        while (isColliding) {
-            x += room.getTileSize();
-            if (x + sprite.getLocalBounds().width > room.getWidth() * room.getTileSize()) {
-                x = 0;
-                y += room.getTileSize();
-            }
-            if (y + sprite.getLocalBounds().height > room.getHeight() * room.getTileSize()) {
-                y = 0;
-            }
-
-            // Check if the new position collides with any wall tiles in the room
-            isColliding = false;
-            for (const auto& wallPos : room.getWallPositions()) {
-                if (x + sprite.getLocalBounds().width > wallPos.x * room.getTileSize() + offset &&
-                    x < (wallPos.x + 1) * room.getTileSize() - offset &&
-                    y + sprite.getLocalBounds().height > wallPos.y * room.getTileSize() + offset &&
-                    y < (wallPos.y + 1) * room.getTileSize() - offset) {
-                    isColliding = true;
-                    break; // Found a wall tile that collides with the new position
-                }
-            }
-        }
-
-        sprite.setOrigin(sprite.getPosition().x + 12.0f, sprite.getPosition().x + 12.0f);
+        sprite.setOrigin(sprite.getPosition().x + tileSize / 2.0f, sprite.getPosition().x + tileSize / 2.0f);
         setPosition();
     }
 
     // Accessors
     float getX() const { return x; }
     float getY() const { return y; }
+    float getDistance(sf::Vector2f tar1, sf::Vector2f tar2) {
+        float dx = tar2.x - tar1.x;
+        float dy = tar2.y - tar1.y;
+        return std::sqrt(dx * dx + dy * dy);
+    }
     int getHealth() const { return health; }
     sf::Vector2f getPlayerCenter() {
         const sf::FloatRect& bounds = sprite.getLocalBounds();
@@ -117,25 +85,6 @@ public:
 
         float nextX = x + dx * movementSpeed * deltaTime.asSeconds();
         float nextY = y + dy * movementSpeed * deltaTime.asSeconds();
-
-        // Check if the new position is within the outer walls
-        if (nextX < 0 ||
-            nextY < 0 ||
-            nextX + sprite.getLocalBounds().width > room.getWidth() * room.getTileSize() ||
-            nextY + sprite.getLocalBounds().height > room.getHeight() * room.getTileSize()) {
-            return; // Don't move outside the outer walls
-        }
-
-        // Check if the new position collides with any wall tiles in the room
-        const float offset = 8.0f; // Adjust this value to change the offset
-        for (const auto& wallPos : room.getWallPositions()) {
-            if (nextX + sprite.getLocalBounds().width > wallPos.x * room.getTileSize() + offset &&
-                nextX < (wallPos.x + 1) * room.getTileSize() - offset &&
-                nextY + sprite.getLocalBounds().height > wallPos.y * room.getTileSize() + offset &&
-                nextY < (wallPos.y + 1) * room.getTileSize() - offset) {
-                return; // Don't move into wall tiles
-            }
-        }
 
         move(dx * movementSpeed * deltaTime.asSeconds(), dy * movementSpeed * deltaTime.asSeconds());
 

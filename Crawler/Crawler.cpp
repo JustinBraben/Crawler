@@ -7,6 +7,7 @@
 #include <string>
 #include "Player.h"
 #include "Room.h"
+#include "Tile.h"
 
 // Define constants for window size, tile size, and other game settings
 const int WINDOW_WIDTH = 840;
@@ -126,6 +127,9 @@ int main() {
     // Create the player and set their starting position
     Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, "Oryx/oryx_16bit_fantasy_world_trans.png", 24);
     Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", room1);
+    Tile myTile(0.0f, 0.0f, TILE_SIZE, "Oryx/oryx_16bit_fantasy_world_trans.png", TileType::Wall);
+
+    std::cout << "x coordinate for the centre is: " << myTile.getCenterLocation2f().x << " | y coordinate for the centre is: " << myTile.getCenterLocation2f().y << "\n";
 
     //room1.setRoom()
 
@@ -157,7 +161,8 @@ int main() {
         // Clear the window and draw the map and player
         window.clear();
         //drawMap(map, window);
-        room1.draw(window);
+        //room1.draw(window);
+        myTile.draw(window);
         player.draw(window);
         window.display();
     }
