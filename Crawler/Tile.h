@@ -66,7 +66,12 @@ public:
     // Will use this when Calculating distance
     sf::Vector2f getCenterLocation2f() {
         float halfTile = static_cast<float>(tileSize / 2.0f);
-        return sf::Vector2f(static_cast<float>(halfTile + tileSize * x), static_cast<float>(halfTile + tileSize * y));
+        return sf::Vector2f(static_cast<float>(getX() + halfTile), static_cast<float>(getY() + halfTile));
+        //return sf::Vector2f(static_cast<float>(halfTile + tileSize * x), static_cast<float>(halfTile + tileSize * y));
+    }
+
+    sf::Vector2f getTopLeft() {
+        return sf::Vector2f(tileSprite.getGlobalBounds().left, tileSprite.getGlobalBounds().top);
     }
 
 private:

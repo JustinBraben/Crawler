@@ -67,17 +67,22 @@ public:
             std::vector<Tile> lineOfTiles;
 
             for (int row = 0; row < height; row++) {
+
                 if (col == 0 || col == width - 1 || row == 0 || row == height - 1) { // if it's an outside tile
-                    lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Wall));
+                    auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall);
+                    lineOfTiles.emplace_back(tempTile);
                     wallPositions.emplace_back(col, row);
                 }
                 else {
                     // Generate a random number between 0 and 99
                     int randomNumber = std::rand() % 100;
 
-                    if (randomNumber < 20) { // 20% chance of being a wall tile
-                        lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Wall));
+                    if (randomNumber < 20) { // 20% chance of being a wall 
+                        auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall);
+                        lineOfTiles.emplace_back(tempTile);
                         wallPositions.emplace_back(col, row);
+                        std::cout << "wall at position: " << col << ", " << row << "\n";
+                        std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
                     }
                     else if (doorCount < 2 && (randomNumber < 25 && randomNumber > 20)) {
                         lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Door));

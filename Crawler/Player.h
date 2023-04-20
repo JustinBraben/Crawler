@@ -8,11 +8,11 @@ public:
         x = startX;
         y = startY;
         tileSize = playerSize;
+        halfTileSize = static_cast<float>(tileSize / 2);
         health = startHealth;
         if (!texture.loadFromFile(spritePath)) {
             // Error handling
         }
-        float halfTileSize = static_cast<float>(tileSize / 2.0f);
         isFacingRight = true;
         sprite.setTexture(texture);
         sprite.setTextureRect(sf::IntRect(tileSize, tileSize, tileSize, tileSize));
@@ -31,60 +31,106 @@ public:
     }
     int getHealth() const { return health; }
     sf::Vector2f getPlayerCenter() {
-        float halfPlayerSize = static_cast<float>(tileSize / 2.0f);
         return sf::Vector2f(static_cast<float>(getX()), static_cast<float>(getY()));
     }
+
+    sf::Vector2f getPlayerTopLeft() {
+        return sf::Vector2f(sprite.getGlobalBounds().left, sprite.getGlobalBounds().top);
+    }
+    
 
     // Mutators
     void setX(float newX) { x = newX; }
     void setY(float newY) { y = newY; }
-    void setPosition()  { 
+    void setPosition() {
         //sprite.setOrigin(getPlayerCenter().x, getPlayerCenter().y);
+        sprite.setPosition(sf::Vector2f(x, y));
+    }
+    void setPosition(float xPos, float yPos)  { 
+        //sprite.setOrigin(getPlayerCenter().x, getPlayerCenter().y);
+        x += xPos;
+        y += yPos;
         sprite.setPosition(sf::Vector2f(x, y)); 
     }
     void setHealth(int newHealth)   { health = newHealth; }
-
-    // Member functions
-    void move(float dx, float dy) {
-        x += dx;
-        y += dy;
-    }
 
     void takeDamage(int damage) {
         health -= damage;
     }
 
-    void update(Room& room, sf::Time deltaTime) {
-        // Calculate movement based on deltaTime
-        float movementSpeed = 150.0f;
-        float dx = 0, dy = 0;
+    sf::Vector2i getPlayerTile() {
+        sf::Vector2i playerTile(static_cast<int>((getPlayerCenter().x - halfTileSize) / halfTileSize),
+            static_cast<int>((getPlayerCenter().y - halfTileSize) / halfTileSize));
+        return playerTile;
+    }
 
+    bool checkCollision(float nextX, float nextY, Room& room) {
+        auto& tileSet = room.getTiles();
+        sf::Vector2f vec2fTileSize(tileSize, tileSize);
+        sf::FloatRect playerHitbox(getPlayerTopLeft(), vec2fTileSize);
+        for (auto& line : tileSet) {
+            for (auto& tile : line) {
+                if (tile.getType() == TileType::Wall) {
+                    sf::FloatRect tileHitbox(tile.getTopLeft(), vec2fTileSize);
+                    if (playerHitbox.intersects(tileHitbox)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+    void update(Room& room, sf::Time deltaTime, sf::Event evnt) {
+        float movementSpeed = 150.0f;
+        float dxMovement = 0.0f;
+        float dyMovement = 0.0f;
+        /*
+        switch (evnt.type) {
+            case sf::Event::KeyPressed:
+                switch (evnt.key.code) {
+                    case sf::Keyboard::A:
+                        dxMovement -= 1.0f;
+                        isFacingRight = false;
+                        break;
+                    case sf::Keyboard::D:
+                        dxMovement += 1.0f;
+                        isFacingRight = true;
+                        break;
+                    case sf::Keyboard::W:
+                        dyMovement -= 1.0f;
+                        break;
+                    case sf::Keyboard::S:
+                        dyMovement += 1.0f;
+                        break;
+                }
+                break;
+        }
+        */
+        
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-            dx = -1.0f;
+            dxMovement -= 1.0f;
             isFacingRight = false;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            dx = 1.0f;
+            dxMovement += 1.0f;
             isFacingRight = true;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-            dy = -1.0f;
+            dyMovement -= 1.0f;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-            dy = 1.0f;
+            dyMovement += 1.0f;
         }
-
+        
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
             getPlayerCenter();
-            std::cout << "Player center: " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+            std::cout << "Player center is in position : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+            std::cout << "Player sprite is in position : left " << sprite.getGlobalBounds().left << ", top " << sprite.getGlobalBounds().top << "\n";
+            //std::cout << "Player center is in tile : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
-
-        float nextX = x + dx * movementSpeed * deltaTime.asSeconds();
-        float nextY = y + dy * movementSpeed * deltaTime.asSeconds();
-
-        move(dx * movementSpeed * deltaTime.asSeconds(), dy * movementSpeed * deltaTime.asSeconds());
-
-        // Update any other necessary data
 
         if (!isFacingRight) {
             sprite.setScale(1.0f, 1.0f);
@@ -93,8 +139,29 @@ public:
             sprite.setScale(-1.0f, 1.0f);
         }
 
+        float nextX = x + dxMovement * movementSpeed * deltaTime.asSeconds();
+        float nextY = y + dyMovement * movementSpeed * deltaTime.asSeconds();
+
+        x = nextX;
+        y = nextY;
+
+        if (!checkCollision(nextX, y, room)) {
+            //x = nextX;
+        }
+        else {
+            std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+        }
+
+        if (!checkCollision(x, nextY, room)) {
+            //y = nextY;
+        }
+        else {
+            std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+        }
+
         setPosition();
     }
+
 
 
     void draw(sf::RenderWindow& window) {
@@ -102,7 +169,7 @@ public:
     }
 
 private:
-    float x, y;
+    float x, y, halfTileSize;
     int health, tileSize;
     bool isFacingRight;
     sf::Texture texture;
