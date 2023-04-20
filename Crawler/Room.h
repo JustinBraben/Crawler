@@ -33,6 +33,7 @@ public:
     sf::Texture& getTileset() { return tileset; }
     std::vector<std::vector<sf::Sprite>>& getTiles() { return tiles; }
     const std::vector<sf::Vector2i>& getWallPositions() const { return wallPositions; }
+    const std::vector<sf::Vector2i>& getDoorPositions() const { return doorPositions; }
 
     // Mutators
     void setX(int newX) { x = newX; }
@@ -46,6 +47,14 @@ public:
             sprite.setPosition(col * tileSize, row * tileSize);
         }
     }
+    void setDoor(int col, int row) {
+        sf::IntRect textureRect = getTextureRect(29, 3); // Door texture rect is (29, 3) in tileset
+        setTile(col, row, textureRect);
+    }
+    // Add this public member function to set the door positions
+    void setDoorPositions(const std::vector<sf::Vector2i>& newDoorPositions) {
+        doorPositions = newDoorPositions;
+    }
 
     // Member functions
     void draw(sf::RenderWindow& window) {
@@ -57,7 +66,9 @@ public:
     }
 
     void randomizeTiles() {
+        const int numDoors = 2; // Set the number of doors you want to create
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
         for (int col = 0; col < width; ++col) {
             for (int row = 0; row < height; ++row) {
                 sf::IntRect textureRect;
@@ -81,6 +92,26 @@ public:
                 setTile(col, row, textureRect);
             }
         }
+
+        // Generate random door positions
+        for (int i = 0; i < numDoors; i++) {
+            sf::Vector2i doorPos;
+            do {
+                doorPos.x = std::rand() % width;
+                doorPos.y = std::rand() % height;
+            } while (isWallTile(doorPos.x, doorPos.y));
+
+            // Check if there is a wall in the same position as the new door
+            auto it = std::find(wallPositions.begin(), wallPositions.end(), doorPos);
+            if (it != wallPositions.end()) {
+                wallPositions.erase(it); // Remove the wall if it exists
+            }
+
+            setDoor(doorPos.x, doorPos.y);
+            doorPositions.push_back(doorPos);
+        }
+
+        setDoorPositions(doorPositions); // Set the door positions in the member variable
     }
 
     bool isWallTile(int col, int row) const {
@@ -89,11 +120,6 @@ public:
             // Out of bounds, treat as a wall tile
             return true;
         }
-        //auto checkSprite = tiles[col][row];
-        //sf::IntRect textureRect = checkSprite.getTextureRect();
-
-        // Check if the texture rect corresponds to a wall tile
-        //return textureRect == getTextureRect(5, 1); // Assuming wall texture rect is (5, 1) in your tileset
         return false;
     }
 
@@ -109,4 +135,5 @@ private:
     sf::Texture tileset;
     std::vector<std::vector<sf::Sprite>> tiles;
     std::vector<sf::Vector2i> wallPositions; // 2D vector of wall positions
+    std::vector<sf::Vector2i> doorPositions; // 2D vector of door positions
 };

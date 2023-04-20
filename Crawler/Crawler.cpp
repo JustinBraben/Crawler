@@ -9,8 +9,8 @@
 #include "Room.h"
 
 // Define constants for window size, tile size, and other game settings
-const int WINDOW_WIDTH = 780;
-const int WINDOW_HEIGHT = 588;
+const int WINDOW_WIDTH = 840;
+const int WINDOW_HEIGHT = 600;
 const int TILE_SIZE = 24;
 const int NUM_TILES_X = WINDOW_WIDTH / TILE_SIZE;
 const int NUM_TILES_Y = WINDOW_HEIGHT / TILE_SIZE;
@@ -124,8 +124,8 @@ int main() {
     //std::vector<std::vector<int>> map = createMap(rooms);
 
     // Create the player and set their starting position
-    Room room1(0, 0, 33, 25, "Oryx/oryx_16bit_fantasy_world_trans.png", 24);
-    Player player(200, 200, 100, "Oryx/oryx_16bit_fantasy_creatures_trans.png", room1);
+    Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, "Oryx/oryx_16bit_fantasy_world_trans.png", 24);
+    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", room1);
 
     //room1.setRoom()
 

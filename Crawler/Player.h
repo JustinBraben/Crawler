@@ -4,19 +4,20 @@
 class Player {
 public:
     // Constructors
-    Player(float startX, float startY, int startHealth, const std::string& spritePath, const Room& room) {
+    Player(float startX, float startY, int startHealth, int playerSize, const std::string& spritePath, Room& room) {
         x = startX;
         y = startY;
+        tileSize = playerSize;
         health = startHealth;
         if (!texture.loadFromFile(spritePath)) {
             // Error handling
         }
         isFacingRight = true;
         sprite.setTexture(texture);
-        sprite.setTextureRect(sf::IntRect(1 * 24, 1 * 24, 24, 24));
+        sprite.setTextureRect(sf::IntRect(tileSize, tileSize, tileSize, tileSize));
 
         // Check if the starting position collides with any wall tiles in the room
-        const float offset = 8.0f; // Adjust this value to change the offset
+        const float offset = static_cast<float>(tileSize / 2); // Adjust this value to change the offset
         bool isColliding = false;
         for (const auto& wallPos : room.getWallPositions()) {
             if (x + sprite.getLocalBounds().width > wallPos.x * room.getTileSize() + offset &&
@@ -157,7 +158,7 @@ public:
 
 private:
     float x, y;
-    int health;
+    int health, tileSize;
     bool isFacingRight;
     sf::Texture texture;
     sf::Sprite sprite;
