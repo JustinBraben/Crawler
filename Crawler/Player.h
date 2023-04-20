@@ -12,17 +12,18 @@ public:
         if (!texture.loadFromFile(spritePath)) {
             // Error handling
         }
+        float halfTileSize = static_cast<float>(tileSize / 2.0f);
         isFacingRight = true;
         sprite.setTexture(texture);
         sprite.setTextureRect(sf::IntRect(tileSize, tileSize, tileSize, tileSize));
-
-        sprite.setOrigin(sprite.getPosition().x + tileSize / 2.0f, sprite.getPosition().x + tileSize / 2.0f);
+        sprite.setOrigin(halfTileSize, halfTileSize);
+        //sprite.setOrigin(sprite.getPosition().x + tileSize / 2.0f, sprite.getPosition().x + tileSize / 2.0f); // working line, but why
         setPosition();
     }
 
     // Accessors
-    float getX() const { return x; }
-    float getY() const { return y; }
+    auto getX() const { return x; }
+    auto getY() const { return y; }
     float getDistance(sf::Vector2f tar1, sf::Vector2f tar2) {
         float dx = tar2.x - tar1.x;
         float dy = tar2.y - tar1.y;
@@ -30,22 +31,17 @@ public:
     }
     int getHealth() const { return health; }
     sf::Vector2f getPlayerCenter() {
-        const sf::FloatRect& bounds = sprite.getLocalBounds();
-        float centerX = getX() + bounds.width / 2;
-        float centerY = getY() + bounds.height / 2;
-        return sf::Vector2f(centerX, centerY);
-    }
-    sf::Vector2f getPlayerCenter(const Player& player) {
-        const sf::FloatRect& bounds = player.sprite.getLocalBounds();
-        float centerX = player.getX() + bounds.width / 2;
-        float centerY = player.getY() + bounds.height / 2;
-        return sf::Vector2f(centerX, centerY);
+        float halfPlayerSize = static_cast<float>(tileSize / 2.0f);
+        return sf::Vector2f(static_cast<float>(getX()), static_cast<float>(getY()));
     }
 
     // Mutators
     void setX(float newX) { x = newX; }
     void setY(float newY) { y = newY; }
-    void setPosition()  { sprite.setPosition(sf::Vector2f(x, y)); }
+    void setPosition()  { 
+        //sprite.setOrigin(getPlayerCenter().x, getPlayerCenter().y);
+        sprite.setPosition(sf::Vector2f(x, y)); 
+    }
     void setHealth(int newHealth)   { health = newHealth; }
 
     // Member functions

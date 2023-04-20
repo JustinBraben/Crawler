@@ -138,6 +138,7 @@ int main() {
     Tile myTile(0.0f, 0.0f, TILE_SIZE, fantasyTileTexture, TileType::Wall);
 
     std::cout << "x coordinate for the centre is: " << myTile.getCenterLocation2f().x << " | y coordinate for the centre is: " << myTile.getCenterLocation2f().y << "\n";
+    std::cout << "x coordinate for player is: " << player.getX() << " | y coordinate for player is: " << player.getX() << "\n";
 
     //room1.setRoom()
 
