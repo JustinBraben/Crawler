@@ -142,18 +142,20 @@ public:
         float nextX = x + dxMovement * movementSpeed * deltaTime.asSeconds();
         float nextY = y + dyMovement * movementSpeed * deltaTime.asSeconds();
 
-        x = nextX;
-        y = nextY;
+        //x = nextX;
+        //y = nextY;
 
+        // This is not working
+        // If there is no 
         if (!checkCollision(nextX, y, room)) {
-            //x = nextX;
+            x = nextX;
         }
         else {
             std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
 
         if (!checkCollision(x, nextY, room)) {
-            //y = nextY;
+            y = nextY;
         }
         else {
             std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
