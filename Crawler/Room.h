@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <random>
 #include "Tile.h"
 
 class Room {
@@ -62,6 +63,13 @@ public:
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
         int doorCount = 0;
 
+        // Make a random number between 1 and 15 inclusive to represent the row of textureRects to pick from
+        std::random_device rd;  // seed the random number generator
+        std::mt19937 gen(rd());  // Mersenne Twister 19937 generator
+        std::uniform_int_distribution<> distrib(1, 15);  // distribution from 1 to 15 inclusive
+
+        int randomTileTextureRow = distrib(gen);  // generate a random number
+
         for (int col = 0; col < width; col++) {
 
             std::vector<Tile> lineOfTiles;
@@ -69,7 +77,7 @@ public:
             for (int row = 0; row < height; row++) {
 
                 if (col == 0 || col == width - 1 || row == 0 || row == height - 1) { // if it's an outside tile
-                    auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall);
+                    auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, randomTileTextureRow);
                     lineOfTiles.emplace_back(tempTile);
                     wallPositions.emplace_back(col, row);
                 }
@@ -78,14 +86,14 @@ public:
                     int randomNumber = std::rand() % 100;
 
                     if (randomNumber < 20) { // 20% chance of being a wall 
-                        auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall);
+                        auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, randomTileTextureRow);
                         lineOfTiles.emplace_back(tempTile);
                         wallPositions.emplace_back(col, row);
                         std::cout << "wall at position: " << col << ", " << row << "\n";
                         std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
                     }
                     else if (doorCount < 2 && (randomNumber < 25 && randomNumber > 20)) {
-                        lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Door));
+                        lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Door, randomTileTextureRow));
                         doorCount++;
                         doorPositions.emplace_back(col, row);
                     }
