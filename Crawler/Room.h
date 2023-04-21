@@ -49,13 +49,6 @@ public:
                 tile.draw(window);
             }
         }
-        /*
-        for (int col = 0; col < width; ++col) {
-            for (int row = 0; row < height; ++row) {
-                tiles[col][row].draw(window);
-            }
-        }
-        */
     }
 
     void randomizeTiles() {
@@ -83,16 +76,17 @@ public:
                 }
                 else {
                     // Generate a random number between 0 and 99
-                    int randomNumber = std::rand() % 100;
+                    std::uniform_int_distribution<> tileDistrib(0, 99); // distribution from 0 to 99 inclusive
+                    int randomNumber = tileDistrib(gen);
 
                     if (randomNumber < 20) { // 20% chance of being a wall 
                         auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, randomTileTextureRow);
                         lineOfTiles.emplace_back(tempTile);
                         wallPositions.emplace_back(col, row);
-                        std::cout << "wall at position: " << col << ", " << row << "\n";
-                        std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
+                        //std::cout << "wall at position: " << col << ", " << row << "\n";
+                        //std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
                     }
-                    else if (doorCount < 2 && (randomNumber < 25 && randomNumber > 20)) {
+                    else if (doorCount < 2 && (randomNumber < 22 && randomNumber > 20)) {
                         lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Door, randomTileTextureRow));
                         doorCount++;
                         doorPositions.emplace_back(col, row);

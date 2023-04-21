@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Room.h"
 #include "Tile.h"
+#include "Camera.h"
 
 // Define constants for window size, tile size, and other game settings
 const int WINDOW_WIDTH = 840;
@@ -133,14 +134,26 @@ int main() {
     }
 
     // Create the player and set their starting position
-    Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
-    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", room1);
-    //Tile myTile(0.0f, 0.0f, TILE_SIZE, fantasyTileTexture, TileType::Wall);
+    std::vector<std::vector<Room>> allRooms;
 
-    //std::cout << "x coordinate for the centre is: " << myTile.getCenterLocation2f().x << " | y coordinate for the centre is: " << myTile.getCenterLocation2f().y << "\n";
-    std::cout << "x coordinate for player is: " << player.getX() << " | y coordinate for player is: " << player.getX() << "\n";
+    for (int i = 0; i < 3; i++) {
+        std::vector<Room> lineRooms;
+        for (int j = 0; j < 3; j++) {
+            Room curRoom(i * NUM_TILES_X,j * NUM_TILES_Y, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
+            lineRooms.emplace_back(curRoom);
+        }
+        allRooms.emplace_back(lineRooms);
+    }
 
-    //room1.setRoom()
+    //Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
+    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", allRooms[0][0]);
+
+    Camera camera(window);
+
+    camera.setRoomView(allRooms[0][0], TILE_SIZE);
+
+    int roomX = 0, roomY = 0;
+    auto& currentRoom = allRooms[roomX][roomY];
 
     // Game loop
     while (window.isOpen()) {
@@ -150,6 +163,31 @@ int main() {
 
             if (evnt.type == sf::Event::Closed) {
                 window.close();
+            }
+
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
+                if (roomX + 1 < 3) {
+                    roomX++;
+                    currentRoom = allRooms[roomX][roomY];
+                }
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
+                if (roomX - 1 >= 0) {
+                    roomX--;
+                    currentRoom = allRooms[roomX][roomY];
+                }
+            }if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
+                if (roomY + 1 < 3) {
+                    roomY++;
+                    currentRoom = allRooms[roomX][roomY];
+                }
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
+                if (roomY - 1 >= 0) {
+                    roomY--;
+                    currentRoom = allRooms[roomX][roomY];
+                }
             }
         }
 
@@ -165,14 +203,13 @@ int main() {
         //}
 
         // Update player
-        player.update(room1, deltaTime, evnt);
+        player.update(currentRoom, deltaTime, evnt);
 
         // Clear the window and draw the map and player
         window.clear();
         //drawMap(map, window);
-        room1.draw(window);
-        //myTile.draw(window);
-        player.draw(window);
+        currentRoom.draw(window);
+        player.draw(window, currentRoom);
         window.display();
     }
 

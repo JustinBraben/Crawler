@@ -10,9 +10,10 @@ public:
         tileSize = playerSize;
         halfTileSize = static_cast<float>(tileSize / 2);
         health = startHealth;
+        currentRoom = &room;
 
         // Check for collision with wall tiles at the start position
-        while (checkCollision(x, y, room)) {
+        while (checkCollision(x, y, room, TileType::Wall)) {
             x += static_cast<float>(tileSize);
             y += static_cast<float>(tileSize);
         }
@@ -25,7 +26,6 @@ public:
         sprite.setTexture(texture);
         sprite.setTextureRect(sf::IntRect(tileSize, tileSize, tileSize, tileSize));
         sprite.setOrigin(halfTileSize, halfTileSize);
-        //sprite.setOrigin(sprite.getPosition().x + tileSize / 2.0f, sprite.getPosition().x + tileSize / 2.0f); // working line, but why
         setPosition();
     }
 
@@ -72,14 +72,14 @@ public:
         return playerTile;
     }
 
-    bool checkCollision(float nextX, float nextY, Room& room) {
+    bool checkCollision(float nextX, float nextY, Room& room, TileType checkTileType) {
         auto& tileSet = room.getTiles();
         sf::Vector2f nextHitBoxPos(nextX, nextY);
         sf::Vector2f vec2fTileSize(tileSize, tileSize);
         sf::FloatRect nextHitbox(nextHitBoxPos, vec2fTileSize);
         for (auto& line : tileSet) {
             for (auto& tile : line) {
-                if (tile.getType() == TileType::Wall) {
+                if (tile.getType() == checkTileType) {
                     //sf::FloatRect tileHitbox(tile.getTopLeft(), vec2fTileSize);
                     //sf::FloatRect tileHitbox(tile.getTopLeft().x + halfTileSize + 2.0f, tile.getTopLeft().y + halfTileSize + 2.0f, vec2fTileSize.x - 4.0f, vec2fTileSize.y - 4.0f);
                     sf::FloatRect tileHitbox = tile.getTileHitBox();
@@ -98,28 +98,7 @@ public:
         float movementSpeed = 150.0f;
         float dxMovement = 0.0f;
         float dyMovement = 0.0f;
-        /*
-        switch (evnt.type) {
-            case sf::Event::KeyPressed:
-                switch (evnt.key.code) {
-                    case sf::Keyboard::A:
-                        dxMovement -= 1.0f;
-                        isFacingRight = false;
-                        break;
-                    case sf::Keyboard::D:
-                        dxMovement += 1.0f;
-                        isFacingRight = true;
-                        break;
-                    case sf::Keyboard::W:
-                        dyMovement -= 1.0f;
-                        break;
-                    case sf::Keyboard::S:
-                        dyMovement += 1.0f;
-                        break;
-                }
-                break;
-        }
-        */
+        currentRoom = &room;
         
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             dxMovement -= 1.0f;
@@ -153,27 +132,24 @@ public:
         float nextX = x + dxMovement * movementSpeed * deltaTime.asSeconds();
         float nextY = y + dyMovement * movementSpeed * deltaTime.asSeconds();
 
-        //x = nextX;
-        //y = nextY;
-
         // When moving in the x direction
         // if no collision detected in potential nextX location
         // update x coord of player sprite
-        if (!checkCollision(nextX, y, room)) {
+        if (!checkCollision(nextX, y, room, TileType::Wall)) {
             x = nextX;
         }
         else {
-            std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+            //std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
 
         // When moving in the x direction
         // if no collision detected in potential nextX location
         // update y coord of player sprite
-        if (!checkCollision(x, nextY, room)) {
+        if (!checkCollision(x, nextY, room, TileType::Wall)) {
             y = nextY;
         }
         else {
-            std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+            //std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
 
         setPosition();
@@ -181,8 +157,10 @@ public:
 
 
 
-    void draw(sf::RenderWindow& window) {
-        window.draw(sprite);
+    void draw(sf::RenderWindow& window, const Room& room) {
+        if (currentRoom == &room) {
+            window.draw(sprite);
+        }
     }
 
 private:
@@ -191,5 +169,6 @@ private:
     bool isFacingRight;
     sf::Texture texture;
     sf::Sprite sprite;
+    Room* currentRoom;
 };
 
