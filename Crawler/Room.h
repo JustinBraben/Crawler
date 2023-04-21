@@ -11,7 +11,7 @@ class Room {
 public:
     // Constructor
     Room(float startX, float startY, int roomWidth, int roomHeight, const sf::Texture& givenTileTexture, int startTileSize)
-        : x(startX), y(startY), width(roomWidth), height(roomHeight), tileset(givenTileTexture), tileSize(startTileSize)
+        : x(startX), y(startY), width(static_cast<int>(startX) + roomWidth), height(static_cast<int>(startY) + roomHeight), tileset(givenTileTexture), tileSize(startTileSize)
     {
         randomizeTiles();
     }
@@ -26,6 +26,26 @@ public:
     auto& getTiles() { return tiles; }
     const std::vector<sf::Vector2i>& getWallPositions() const { return wallPositions; }
     const std::vector<sf::Vector2i>& getDoorPositions() const { return doorPositions; }
+    const std::vector<sf::Vector2i>& getFloorPositions() const { return floorPositions; }
+    bool containsPosition(const std::vector<sf::Vector2i>& positions, const sf::Vector2i& pos) {
+        return std::find(positions.begin(), positions.end(), pos) != positions.end();
+    }
+    bool isTileType(int col, int row, TileType tileTypeCheck) {
+        sf::Vector2i pos(col, row);
+        if (col < 0 || col >= width || row < 0 || row >= height) {
+            return true;
+        }
+        if (tileTypeCheck == TileType::Wall) {
+            return containsPosition(getWallPositions(), pos);
+        }
+        else if (tileTypeCheck == TileType::Floor) {
+            return containsPosition(getFloorPositions(), pos);
+        }
+        else if (tileTypeCheck == TileType::Door) {
+            return containsPosition(getDoorPositions(), pos);
+        }
+        return false;
+    }
 
     // Mutators
     void setX(float newX) { x = newX; }
@@ -86,13 +106,16 @@ public:
                         //std::cout << "wall at position: " << col << ", " << row << "\n";
                         //std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
                     }
+                    /* // don't make doors in Room code. They can be made in RoomManager
                     else if (doorCount < 2 && (randomNumber < 22 && randomNumber > 20)) {
                         lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Door, randomTileTextureRow));
                         doorCount++;
                         doorPositions.emplace_back(col, row);
                     }
+                    */
                     else {
                         lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Floor)); // floor texture coordinates
+                        floorPositions.emplace_back(col, row);
                     }
                 }
             }
@@ -100,7 +123,6 @@ public:
             tiles.emplace_back(lineOfTiles);
         }
     }
-
     /*
     bool isWallTile(int col, int row) const {
         // Check if the tile at the given position is a wall tile
@@ -128,6 +150,7 @@ private:
     int tileSize;
     sf::Texture tileset;
     std::vector<std::vector<Tile>> tiles;
-    std::vector<sf::Vector2i> wallPositions; // 2D vector of wall positions
-    std::vector<sf::Vector2i> doorPositions; // 2D vector of door positions
+    std::vector<sf::Vector2i> wallPositions;    // 2D vector of wall positions
+    std::vector<sf::Vector2i> doorPositions;    // 2D vector of door positions
+    std::vector<sf::Vector2i> floorPositions;   // 2D vector of floor positions
 };

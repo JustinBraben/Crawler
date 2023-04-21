@@ -82,10 +82,10 @@ public:
 
         for (int i = -radius; i <= radius; i++) {
             for (int j = -radius; j <= radius; j++) {
-                int x = playerTile.x + i;
-                int y = playerTile.y + j;
-                if (x >= 0 && x < tileSet.size() && y >= 0 && y < tileSet[x].size()) {
-                    Tile& tile = tileSet[x][y];
+                int checkX = playerTile.x + i;
+                int checkY = playerTile.y + j;
+                if (checkX >= 0 && checkX < tileSet.size() && checkY >= 0 && checkY < tileSet[checkX].size()) {
+                    Tile& tile = tileSet[checkX][checkY];
                     if (tile.getType() == checkTileType) {
                         sf::FloatRect tileHitbox = tile.getTileHitBox();
                         if (nextHitbox.intersects(tileHitbox)) {

@@ -24,7 +24,7 @@ public:
         // Loop through 1 to 27 inclusive and add textureRects to your tileTextureRects
         for (int i = 1; i < 28; i++) {
             sf::IntRect textureRect = getTextureRect(i, tileTextureRow);
-            tileTextureRects.push_back(textureRect);
+            tileTextureRects.emplace_back(textureRect);
         }
 
         //for (int i = 1; i < )
@@ -32,11 +32,11 @@ public:
         switch (tileType) {
         case TileType::Wall:
             //textureRect = getTextureRect(10, 1); // wall texture coordinates
-            tileSprite.setTextureRect(tileTextureRects[10 - 1]); // wall texture coordinates
+            tileSprite.setTextureRect(tileTextureRects[9]); // wall texture coordinates
             break;
         case TileType::Floor:
             //textureRect = getTextureRect(5, 1);  // floor texture coordinates
-            tileSprite.setTextureRect(tileTextureRects[5 - 1]);  // floor texture coordinates
+            tileSprite.setTextureRect(tileTextureRects[4]);  // floor texture coordinates
             break;
         case TileType::Door:
             tileSprite.setTextureRect(getTextureRect(29, 3)); // door texture coordinates
