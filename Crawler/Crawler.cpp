@@ -16,9 +16,9 @@ const int WINDOW_HEIGHT = 600;
 const int TILE_SIZE = 24;
 const int NUM_TILES_X = WINDOW_WIDTH / TILE_SIZE;
 const int NUM_TILES_Y = WINDOW_HEIGHT / TILE_SIZE;
-const int NUM_ROOMS = 5;
-const int MAX_ROOM_SIZE = 10;
-const int MIN_ROOM_SIZE = 5;
+const int NUM_ROOMS = 4;
+const int MAX_ROOM_SIZE = 9;
+const int MIN_ROOM_SIZE = 4;
 
 // Define room struct
 //struct Room {

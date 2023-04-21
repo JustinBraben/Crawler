@@ -67,24 +67,30 @@ public:
     }
 
     sf::Vector2i getPlayerTile() {
-        sf::Vector2i playerTile(static_cast<int>((getPlayerCenter().x - halfTileSize) / halfTileSize),
-            static_cast<int>((getPlayerCenter().y - halfTileSize) / halfTileSize));
+        sf::Vector2i playerTile(static_cast<int>(getPlayerCenter().x) / static_cast<int>(tileSize),
+            static_cast<int>(getPlayerCenter().y) / static_cast<int>(tileSize)
+        );
         return playerTile;
     }
 
-    bool checkCollision(float nextX, float nextY, Room& room, TileType checkTileType) {
+    bool checkCollision(float nextX, float nextY, Room& room, TileType checkTileType, int radius = 1) {
         auto& tileSet = room.getTiles();
+        sf::Vector2i playerTile = getPlayerTile();
         sf::Vector2f nextHitBoxPos(nextX, nextY);
         sf::Vector2f vec2fTileSize(tileSize, tileSize);
         sf::FloatRect nextHitbox(nextHitBoxPos, vec2fTileSize);
-        for (auto& line : tileSet) {
-            for (auto& tile : line) {
-                if (tile.getType() == checkTileType) {
-                    //sf::FloatRect tileHitbox(tile.getTopLeft(), vec2fTileSize);
-                    //sf::FloatRect tileHitbox(tile.getTopLeft().x + halfTileSize + 2.0f, tile.getTopLeft().y + halfTileSize + 2.0f, vec2fTileSize.x - 4.0f, vec2fTileSize.y - 4.0f);
-                    sf::FloatRect tileHitbox = tile.getTileHitBox();
-                    if (nextHitbox.intersects(tileHitbox)) {
-                        return true;
+
+        for (int i = -radius; i <= radius; i++) {
+            for (int j = -radius; j <= radius; j++) {
+                int x = playerTile.x + i;
+                int y = playerTile.y + j;
+                if (x >= 0 && x < tileSet.size() && y >= 0 && y < tileSet[x].size()) {
+                    Tile& tile = tileSet[x][y];
+                    if (tile.getType() == checkTileType) {
+                        sf::FloatRect tileHitbox = tile.getTileHitBox();
+                        if (nextHitbox.intersects(tileHitbox)) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -117,8 +123,9 @@ public:
         
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
             getPlayerCenter();
-            std::cout << "Player center is in position : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
-            std::cout << "Player sprite is in position : left " << sprite.getGlobalBounds().left << ", top " << sprite.getGlobalBounds().top << "\n";
+            //std::cout << "Player center is in position : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+            std::cout << "Player Tile is in position : " << getPlayerTile().x << ", " << getPlayerTile().y << "\n";
+            //std::cout << "Player sprite is in position : left " << sprite.getGlobalBounds().left << ", top " << sprite.getGlobalBounds().top << "\n";
             //std::cout << "Player center is in tile : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
 
