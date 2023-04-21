@@ -10,9 +10,17 @@ public:
         tileSize = playerSize;
         halfTileSize = static_cast<float>(tileSize / 2);
         health = startHealth;
+
+        // Check for collision with wall tiles at the start position
+        while (checkCollision(x, y, room)) {
+            x += static_cast<float>(tileSize);
+            y += static_cast<float>(tileSize);
+        }
+
         if (!texture.loadFromFile(spritePath)) {
             // Error handling
         }
+
         isFacingRight = true;
         sprite.setTexture(texture);
         sprite.setTextureRect(sf::IntRect(tileSize, tileSize, tileSize, tileSize));
@@ -66,13 +74,16 @@ public:
 
     bool checkCollision(float nextX, float nextY, Room& room) {
         auto& tileSet = room.getTiles();
+        sf::Vector2f nextHitBoxPos(nextX, nextY);
         sf::Vector2f vec2fTileSize(tileSize, tileSize);
-        sf::FloatRect playerHitbox(getPlayerTopLeft(), vec2fTileSize);
+        sf::FloatRect nextHitbox(nextHitBoxPos, vec2fTileSize);
         for (auto& line : tileSet) {
             for (auto& tile : line) {
                 if (tile.getType() == TileType::Wall) {
-                    sf::FloatRect tileHitbox(tile.getTopLeft(), vec2fTileSize);
-                    if (playerHitbox.intersects(tileHitbox)) {
+                    //sf::FloatRect tileHitbox(tile.getTopLeft(), vec2fTileSize);
+                    //sf::FloatRect tileHitbox(tile.getTopLeft().x + halfTileSize + 2.0f, tile.getTopLeft().y + halfTileSize + 2.0f, vec2fTileSize.x - 4.0f, vec2fTileSize.y - 4.0f);
+                    sf::FloatRect tileHitbox = tile.getTileHitBox();
+                    if (nextHitbox.intersects(tileHitbox)) {
                         return true;
                     }
                 }
@@ -145,8 +156,9 @@ public:
         //x = nextX;
         //y = nextY;
 
-        // This is not working
-        // If there is no 
+        // When moving in the x direction
+        // if no collision detected in potential nextX location
+        // update x coord of player sprite
         if (!checkCollision(nextX, y, room)) {
             x = nextX;
         }
@@ -154,6 +166,9 @@ public:
             std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
 
+        // When moving in the x direction
+        // if no collision detected in potential nextX location
+        // update y coord of player sprite
         if (!checkCollision(x, nextY, room)) {
             y = nextY;
         }

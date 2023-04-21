@@ -11,8 +11,8 @@ enum class TileType {
 class Tile
 {
 public:
-    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type) :
-        x(startX), y(startY), tileSize(startTileSize), tileType(type) {
+    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, float hbOffset = 2.0f) :
+        x(startX), y(startY), tileSize(startTileSize), tileType(type), hitboxOffset(hbOffset) {
 
         // Set the tileTexture
         tileSprite.setTexture(givenTileTexture);
@@ -74,8 +74,17 @@ public:
         return sf::Vector2f(tileSprite.getGlobalBounds().left, tileSprite.getGlobalBounds().top);
     }
 
+    sf::FloatRect getTileHitBox() {
+        float halfTile = static_cast<float>(tileSize / 2.0f);
+        return sf::FloatRect(getTopLeft().x + halfTile + hitboxOffset,
+            getTopLeft().y + halfTile + hitboxOffset,
+            tileSize - (2.0f * hitboxOffset), 
+            tileSize - (2.0f * hitboxOffset)
+        );
+    }
+
 private:
-    float x, y;
+    float x, y, hitboxOffset;
     int tileSize;
     TileType tileType;
     sf::Texture tileTexture;
