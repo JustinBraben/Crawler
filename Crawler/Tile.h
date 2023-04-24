@@ -13,7 +13,7 @@ enum class TileType {
 class Tile
 {
 public:
-    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, const std::vector<sf::IntRect> tileTextureRects, float hbOffset = 2.0f) :
+    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, const std::vector<sf::IntRect>& tileTextureRects, float hbOffset = 2.0f) :
         x(startX), y(startY), tileSize(startTileSize), tileType(type), hitboxOffset(hbOffset) {
 
         // Set the tileTexture

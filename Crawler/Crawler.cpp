@@ -136,24 +136,28 @@ int main() {
     // Create the player and set their starting position
     std::vector<std::vector<Room>> allRooms;
 
-    for (int i = 0; i < 3; i++) {
+    /*
+    for (int i = 0; i < 2; i++) {
         std::vector<Room> lineRooms;
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < 2; j++) {
             Room curRoom(i * NUM_TILES_X,j * NUM_TILES_Y, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
             lineRooms.emplace_back(curRoom);
         }
         allRooms.emplace_back(lineRooms);
     }
+    */
+
+    Room curRoom(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, TILE_SIZE);
 
     //Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
-    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", allRooms[0][0]);
+    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", curRoom);
 
     Camera camera(window);
 
-    camera.setRoomView(allRooms[0][0], TILE_SIZE);
+    camera.setRoomView(curRoom, TILE_SIZE);
 
     int roomX = 0, roomY = 0;
-    auto& currentRoom = allRooms[roomX][roomY];
+    //auto& currentRoom = allRooms[roomX][roomY];
 
     // Game loop
     while (window.isOpen()) {
@@ -165,7 +169,7 @@ int main() {
                 window.close();
             }
 
-
+            /*
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
                 if (roomX + 1 < 3) {
                     roomX++;
@@ -189,6 +193,7 @@ int main() {
                     currentRoom = allRooms[roomX][roomY];
                 }
             }
+            */
         }
 
         // Calculate delta time
@@ -203,13 +208,13 @@ int main() {
         //}
 
         // Update player
-        player.update(currentRoom, deltaTime, evnt);
+        player.update(curRoom, deltaTime, evnt);
 
         // Clear the window and draw the map and player
         window.clear();
         //drawMap(map, window);
-        currentRoom.draw(window);
-        player.draw(window, currentRoom);
+        curRoom.draw(window);
+        player.draw(window, curRoom);
         window.display();
     }
 

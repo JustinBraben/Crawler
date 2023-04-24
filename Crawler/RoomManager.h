@@ -20,7 +20,7 @@ public:
 
             // Create the room
             Room room(x, y, width, height, tileset, tileSize);
-            room.randomizeTiles();
+            //room.randomizeTiles();
             room.setDoorPositions(generateDoorPositions(room));
 
             // Add the room to the vector of rooms
