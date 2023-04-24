@@ -60,6 +60,9 @@ public:
         y = newY;
         tileSprite.setPosition(x, y);
     }
+    void setType(TileType newTileType) {
+        tileType = newTileType;
+    }
 
     // Member Functions
     void draw(sf::RenderWindow& window) {

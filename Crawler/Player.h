@@ -56,8 +56,8 @@ public:
     }
     void setPosition(float xPos, float yPos)  { 
         //sprite.setOrigin(getPlayerCenter().x, getPlayerCenter().y);
-        x += xPos;
-        y += yPos;
+        x = xPos;
+        y = yPos;
         sprite.setPosition(sf::Vector2f(x, y)); 
     }
     void setHealth(int newHealth)   { health = newHealth; }
@@ -85,9 +85,9 @@ public:
                 int checkX = playerTile.x + i;
                 int checkY = playerTile.y + j;
                 if (checkX >= 0 && checkX < tileSet.size() && checkY >= 0 && checkY < tileSet[checkX].size()) {
-                    Tile& tile = tileSet[checkX][checkY];
-                    if (tile.getType() == checkTileType) {
-                        sf::FloatRect tileHitbox = tile.getTileHitBox();
+                    auto tile = tileSet[checkX][checkY];
+                    if (tile->getType() == checkTileType) {
+                        sf::FloatRect tileHitbox = tile->getTileHitBox();
                         if (nextHitbox.intersects(tileHitbox)) {
                             return true;
                         }

@@ -144,9 +144,6 @@ int main() {
 
     //camera.setRoomView(*(gameRooms.getPlayerRoom()), TILE_SIZE);
 
-    int roomX = 0, roomY = 0;
-    //auto& currentRoom = allRooms[roomX][roomY];
-
     // Game loop
     while (window.isOpen()) {
         // Handle events
