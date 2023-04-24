@@ -159,6 +159,25 @@ public:
             //std::cout << "Player collided with tile here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
         }
 
+        
+        if (checkCollision(nextX, y, room, TileType::Door)) {
+            std::cout << "Player collided with Door here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+        }
+        else {
+            //std::cout << "Player collided with Door here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+        }
+
+        // When moving in the x direction
+        // if no collision detected in potential nextX location
+        // update y coord of player sprite
+        if (checkCollision(x, nextY, room, TileType::Door)) {
+            std::cout << "Player collided with Door here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+        }
+        else {
+            //std::cout << "Player collided with Door here : " << getPlayerCenter().x << ", " << getPlayerCenter().y << "\n";
+        }
+        
+
         setPosition();
     }
 
@@ -166,8 +185,8 @@ public:
 
     void draw(sf::RenderWindow& window, const std::shared_ptr<Room> room) {
         if (currentRoom == room) {
-            window.draw(sprite);
-        }
+        window.draw(sprite);
+    }
     }
 
 private:

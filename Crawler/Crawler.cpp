@@ -137,8 +137,7 @@ int main() {
 
     RoomManager gameRooms(2, 2, NUM_TILES_X, NUM_TILES_Y, TILE_SIZE, fantasyTileTexture);
 
-    //Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
-    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", gameRooms.getPlayerRoom());
+    auto player = std::make_shared<Player>(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", gameRooms.getPlayerRoom());
 
     //Camera camera(window);
 
@@ -193,13 +192,12 @@ int main() {
         //}
 
         // Update player
-        player.update(gameRooms.getPlayerRoom(), deltaTime, evnt);
+        player->update(gameRooms.getPlayerRoom(), deltaTime, evnt);
 
         // Clear the window and draw the map and player
         window.clear();
         gameRooms.draw(window);
-        //gameRooms.getPlayerRoom()->draw(window);
-        player.draw(window, gameRooms.getPlayerRoom());
+        player->draw(window, gameRooms.getPlayerRoom());
         window.display();
     }
 
