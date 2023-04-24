@@ -31,7 +31,7 @@ public:
                 //int textureRow = std::rand() % 15 + 1;
 
                 // Create the room
-                auto room = std::make_shared<Room>(x, y, width, height, tileset, roomTileSize);
+                auto room = std::make_shared<Room>(x * static_cast<float>(width), y * static_cast<float>(height), width, height, tileset, roomTileSize);
 
                 //room.setDoorPositions(generateDoorPositions(room));
 
@@ -59,6 +59,7 @@ private:
     std::vector<std::shared_ptr<Room>> rooms;
     std::shared_ptr<Room> playerRoom;
     // Helper function to generate door positions for a room
+    /*
     std::vector<sf::Vector2i> generateDoorPositions(Room& room) {
         std::vector<sf::Vector2i> floorPositions = room.getFloorPositions();
         std::random_device rd;
@@ -88,6 +89,7 @@ private:
         
         return floorPositions;
     }
+    */
 };
 
 

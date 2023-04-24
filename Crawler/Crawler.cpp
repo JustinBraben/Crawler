@@ -135,21 +135,7 @@ int main() {
     // Create the player and set their starting position
     std::vector<std::vector<Room>> allRooms;
 
-    /*
-    for (int i = 0; i < 2; i++) {
-        std::vector<Room> lineRooms;
-        for (int j = 0; j < 2; j++) {
-            Room curRoom(i * NUM_TILES_X,j * NUM_TILES_Y, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
-            lineRooms.emplace_back(curRoom);
-        }
-        allRooms.emplace_back(lineRooms);
-    }
-    */
-
-    RoomManager gameRooms(1, 1, NUM_TILES_X, NUM_TILES_Y, TILE_SIZE, fantasyTileTexture);
-    //auto curRoom = gameRooms.getPlayerRoom();
-
-    //Room curRoom(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, TILE_SIZE);
+    RoomManager gameRooms(2, 2, NUM_TILES_X, NUM_TILES_Y, TILE_SIZE, fantasyTileTexture);
 
     //Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
     Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", gameRooms.getPlayerRoom());

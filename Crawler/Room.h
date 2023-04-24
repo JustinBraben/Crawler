@@ -24,27 +24,32 @@ public:
     auto getTileSize() const { return tileSize; }
     const auto& getTileset() { return tileset; }
     auto& getTiles() { return tiles; }
-    const std::vector<sf::Vector2i>& getWallPositions() const { return wallPositions; }
-    const std::vector<sf::Vector2i>& getDoorPositions() const { return doorPositions; }
-    const std::vector<sf::Vector2i>& getFloorPositions() const { return floorPositions; }
     // Get IntRect for tile mapping textures
     sf::IntRect getTextureRect(int x, int y) const {
         return sf::IntRect(x * tileSize, y * tileSize, tileSize, tileSize);
+    }
+    std::vector<sf::Vector2i> getTilesOfType(TileType targetType) const {
+        std::vector<sf::Vector2i> positions;
+
+        for (size_t column = 0; column < tiles.size(); ++column) {
+            for (size_t row = 0; row < tiles[column].size(); ++row) {
+                if (tiles[column][row].getType() == targetType) {
+                    positions.emplace_back(column, row);
+                }
+            }
+        }
+
+        return positions;
     }
 
     // Mutators
     void setX(float newX) { x = newX; }
     void setY(float newY) { y = newY; }
     void setTile(int col, int row, TileType type) {
-        if (col >= 0 && col < width && row >= 0 && row < height) {
+        if (col >= x && col < width && row >= y && row < height) {
             auto& tile = tiles[col][row];
             tile = Tile(static_cast<float>(col), static_cast<float>(row), tileSize, tileset, type, tileTextureRects);
         }
-    }
-
-    // Add this public member function to set the door positions
-    void setDoorPositions(const std::vector<sf::Vector2i>& newDoorPositions) {
-        doorPositions = newDoorPositions;
     }
 
     // Member functions
@@ -79,7 +84,6 @@ public:
                 if (col == static_cast<int>(x) || col == width - 1 || row == static_cast<int>(y) || row == height - 1) { // if it's an outside tile
                     auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, tileTextureRects);
                     lineOfTiles.emplace_back(tempTile);
-                    wallPositions.emplace_back(col, row);
                 }
                 else {
                     // Generate a random number between 0 and 99
@@ -89,13 +93,11 @@ public:
                     if (randomNumber < 20) { // 20% chance of being a wall 
                         auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, tileTextureRects);
                         lineOfTiles.emplace_back(tempTile);
-                        wallPositions.emplace_back(col, row);
                         //std::cout << "wall at position: " << col << ", " << row << "\n";
                         //std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
                     }
                     else {
                         lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Floor, tileTextureRects)); // floor texture coordinates
-                        floorPositions.emplace_back(col, row);
                     }
                 }
             }
@@ -106,21 +108,17 @@ public:
     bool containsPosition(const std::vector<sf::Vector2i>& positions, const sf::Vector2i& pos) {
         return std::find(positions.begin(), positions.end(), pos) != positions.end();
     }
+    void removePosition(std::vector<sf::Vector2i>& positions, const sf::Vector2i& pos) {
+        if (containsPosition(positions, pos)) {
+            positions.erase(std::remove(positions.begin(), positions.end(), pos), positions.end());
+        }
+    }
     bool isTileType(int col, int row, TileType tileTypeCheck) {
         sf::Vector2i pos(col, row);
-        if (col < 0 || col >= width || row < 0 || row >= height) {
+        if (col < x || col >= width || row < y || row >= height) {
             return true;
         }
-        if (tileTypeCheck == TileType::Wall) {
-            return containsPosition(getWallPositions(), pos);
-        }
-        else if (tileTypeCheck == TileType::Floor) {
-            return containsPosition(getFloorPositions(), pos);
-        }
-        else if (tileTypeCheck == TileType::Door) {
-            return containsPosition(getDoorPositions(), pos);
-        }
-        return false;
+        return containsPosition(getTilesOfType(tileTypeCheck), pos);
     }
 private:
     float x, y;                                 // Top left corner coordinates for the room
@@ -129,7 +127,4 @@ private:
     sf::Texture tileset;                        // Texture for the tiles
     std::vector<sf::IntRect> tileTextureRects;  // Int Rects for the Texture of the tiles
     std::vector<std::vector<Tile>> tiles;       // 2D vector of Tiles for the room
-    std::vector<sf::Vector2i> wallPositions;    // 2D vector of wall positions
-    std::vector<sf::Vector2i> doorPositions;    // 2D vector of door positions
-    std::vector<sf::Vector2i> floorPositions;   // 2D vector of floor positions
 };
