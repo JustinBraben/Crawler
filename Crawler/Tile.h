@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>
+#include <vector>
 
 enum class TileType {
     Wall,
@@ -12,7 +13,7 @@ enum class TileType {
 class Tile
 {
 public:
-    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, int tileTextureRow = 3, float hbOffset = 2.0f) :
+    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, const std::vector<sf::IntRect> tileTextureRects, float hbOffset = 2.0f) :
         x(startX), y(startY), tileSize(startTileSize), tileType(type), hitboxOffset(hbOffset) {
 
         // Set the tileTexture
@@ -22,10 +23,10 @@ public:
         setPosition(startX * tileSize, startY * tileSize);
 
         // Loop through 1 to 27 inclusive and add textureRects to your tileTextureRects
-        for (int i = 1; i < 28; i++) {
-            sf::IntRect textureRect = getTextureRect(i, tileTextureRow);
-            tileTextureRects.emplace_back(textureRect);
-        }
+        //for (int i = 1; i < 28; i++) {
+        //    sf::IntRect textureRect = getTextureRect(i, tileTextureRow);
+        //    tileTextureRects.emplace_back(textureRect);
+        //}
 
         //for (int i = 1; i < )
 

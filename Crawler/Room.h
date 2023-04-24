@@ -53,7 +53,7 @@ public:
     void setTile(int col, int row, TileType type) {
         if (col >= 0 && col < width && row >= 0 && row < height) {
             auto& tile = tiles[col][row];
-            tile = Tile(static_cast<float>(col), static_cast<float>(row), tileSize, tileset, type);
+            tile = Tile(static_cast<float>(col), static_cast<float>(row), tileSize, tileset, type, tileTextureRects);
         }
     }
 
@@ -83,6 +83,12 @@ public:
 
         int randomTileTextureRow = distrib(gen);  // generate a random number
 
+        // Loop through 1 to 27 inclusive and add textureRects to your tileTextureRects
+        for (int i = 1; i < 28; i++) {
+            sf::IntRect textureRect = getTextureRect(i, randomTileTextureRow);
+            tileTextureRects.emplace_back(textureRect);
+        }
+
         for (int col = 0; col < width; col++) {
 
             std::vector<Tile> lineOfTiles;
@@ -90,7 +96,8 @@ public:
             for (int row = 0; row < height; row++) {
 
                 if (col == 0 || col == width - 1 || row == 0 || row == height - 1) { // if it's an outside tile
-                    auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, randomTileTextureRow);
+                    //auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, randomTileTextureRow);
+                    auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, tileTextureRects);
                     lineOfTiles.emplace_back(tempTile);
                     wallPositions.emplace_back(col, row);
                 }
@@ -100,7 +107,7 @@ public:
                     int randomNumber = tileDistrib(gen);
 
                     if (randomNumber < 20) { // 20% chance of being a wall 
-                        auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, randomTileTextureRow);
+                        auto tempTile = Tile(col, row, tileSize, tileset, TileType::Wall, tileTextureRects);
                         lineOfTiles.emplace_back(tempTile);
                         wallPositions.emplace_back(col, row);
                         //std::cout << "wall at position: " << col << ", " << row << "\n";
@@ -114,7 +121,7 @@ public:
                     }
                     */
                     else {
-                        lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Floor)); // floor texture coordinates
+                        lineOfTiles.emplace_back(Tile(col, row, tileSize, tileset, TileType::Floor, tileTextureRects)); // floor texture coordinates
                         floorPositions.emplace_back(col, row);
                     }
                 }
@@ -123,6 +130,12 @@ public:
             tiles.emplace_back(lineOfTiles);
         }
     }
+
+    // Get IntRect for tile mapping textures
+    sf::IntRect getTextureRect(int x, int y) const {
+        return sf::IntRect(x * tileSize, y * tileSize, tileSize, tileSize);
+    }
+
     /*
     bool isWallTile(int col, int row) const {
         // Check if the tile at the given position is a wall tile
@@ -138,17 +151,13 @@ public:
         float centerY = wallPosition.y + tileSize / 2;
         return sf::Vector2f(centerX, centerY);
     }
-
-    // Get IntRect for tile mapping textures
-    sf::IntRect getTextureRect(int x, int y) const {
-        return sf::IntRect(x * tileSize, y * tileSize, tileSize, tileSize);
-    }
     */
 private:
     float x, y;
     int width, height;
     int tileSize;
     sf::Texture tileset;
+    std::vector<sf::IntRect> tileTextureRects;
     std::vector<std::vector<Tile>> tiles;
     std::vector<sf::Vector2i> wallPositions;    // 2D vector of wall positions
     std::vector<sf::Vector2i> doorPositions;    // 2D vector of door positions
