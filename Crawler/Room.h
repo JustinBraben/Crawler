@@ -17,17 +17,19 @@ struct Door {
 class Room {
 public:
     // Constructor
-    Room(float startX, float startY, int roomWidth, int roomHeight, const sf::Texture& givenTileTexture, int startTileSize)
-        : x(startX), y(startY), width(static_cast<int>(startX) + roomWidth), height(static_cast<int>(startY) + roomHeight), tileset(givenTileTexture), tileSize(startTileSize)
+    Room(float startX, float startY, float roomWidth, float roomHeight, const sf::Texture& givenTileTexture, int startTileSize)
+        : startX(startX), startY(startY), endX(startX + roomWidth), endY(startY + roomHeight), width(static_cast<int>(roomWidth)), height(static_cast<int>(roomHeight)), tileset(givenTileTexture), tileSize(startTileSize)
     {
         randomizeTiles();
     }
 
     // Accessors
-    auto getX() const { return x; }
-    auto getY() const { return y; }
-    auto getWidth() const { return width; }
-    auto getHeight() const { return height; }
+    auto getX() const { return startX; }
+    auto getY() const { return startY; }
+    auto getXEnd() const { return endX; }
+    auto getYEnd() const { return endY; }
+    auto getWidth() const { return endX - startX; }
+    auto getHeight() const { return endY - startY; }
     auto getTileSize() const { return tileSize; }
     const auto& getTileset() { return tileset; }
     auto& getTiles() { return tiles; }
@@ -51,12 +53,11 @@ public:
     }
 
     // Mutators
-    void setX(float newX) { x = newX; }
-    void setY(float newY) { y = newY; }
+    void setX(float newX) { startX = newX; }
+    void setY(float newY) { startY = newY; }
     void setTile(int col, int row, TileType type) {
-        if (col >= x && col < width && row >= y && row < height) {
-            //auto newTile = std::make_shared<Tile>(static_cast<float>(col), static_cast<float>(row), tileSize, tileset, type, tileTextureRects);
-            //tiles[col - xStart][row - yStart] = newTile;
+        if (col >= 0 && col < width && row >= 0 && row < height) {
+            tiles[col][row]->setType(type, tileTextureRects);
         }
     }
 
@@ -102,7 +103,7 @@ public:
         // Add the door to the doors vector
         doors.push_back(newDoor);
 
-        //setTile(newDoor.position.x, newDoor.position.y, TileType::Door);
+        setTile(newDoor.position.x, newDoor.position.y, TileType::Door);
     }
 
     Door generateDoor() {
@@ -158,14 +159,14 @@ public:
             tileTextureRects.emplace_back(textureRect);
         }
 
-        for (int col = static_cast<int>(x); col < width; col++) {
+        for (auto col = 0; col < width; col++) {
 
             std::vector<std::shared_ptr<Tile>> lineOfTiles;
 
-            for (int row = static_cast<int>(y); row < height; row++) {
+            for (auto row = 0; row < height; row++) {
 
-                if (col == static_cast<int>(x) || col == width - 1 || row == static_cast<int>(y) || row == height - 1) { // if it's an outside tile
-                    auto tempTile = std::make_shared<Tile>(col, row, tileSize, tileset, TileType::Wall, tileTextureRects);
+                if (col == 0 || col == width - 1 || row == 0 || row == height - 1) { // if it's an outside tile
+                    auto tempTile = std::make_shared<Tile>(col, row, startX, startY, getWidth(), getHeight(), tileSize, tileset, TileType::Wall, tileTextureRects);
                     lineOfTiles.emplace_back(tempTile);
                 }
                 else {
@@ -174,13 +175,13 @@ public:
                     int randomNumber = tileDistrib(gen);
 
                     if (randomNumber < 20) { // 20% chance of being a wall 
-                        auto tempTile = std::make_shared<Tile>(col, row, tileSize, tileset, TileType::Wall, tileTextureRects);
+                        auto tempTile = std::make_shared<Tile>(col, row, startX, startY, getWidth(), getHeight(), tileSize, tileset, TileType::Wall, tileTextureRects);
                         lineOfTiles.emplace_back(tempTile);
                         //std::cout << "wall at position: " << col << ", " << row << "\n";
                         //std::cout << "center of wall is : " << tempTile.getCenterLocation2f().x << ", " << tempTile.getCenterLocation2f().y << "\n";
                     }
                     else {
-                        lineOfTiles.emplace_back(std::make_shared<Tile>(col, row, tileSize, tileset, TileType::Floor, tileTextureRects)); // floor texture coordinates
+                        lineOfTiles.emplace_back(std::make_shared<Tile>(col, row, startX, startY, getWidth(), getHeight(), tileSize, tileset, TileType::Floor, tileTextureRects)); // floor texture coordinates
                     }
                 }
             }
@@ -198,7 +199,7 @@ public:
     }
     bool isTileType(int col, int row, TileType tileTypeCheck) {
         sf::Vector2i pos(col, row);
-        if (col < x || col >= width || row < y || row >= height) {
+        if (col < startX || col >= width || row < startY || row >= height) {
             return true;
         }
         return containsPosition(getTilesOfType(tileTypeCheck), pos);
@@ -208,8 +209,9 @@ public:
         doors.push_back(door);
     }
 private:
-    int x, y;                                                   // Top left corner coordinates for the room
-    int width, height;                                          // Width/Height of the board
+    float startX, startY;                                       // Top left corner coordinates for the room
+    float endX, endY;                                           // Bottom right corner coordinates for the room
+    int width, height;                                        // Width/Height of the board
     int tileSize;                                               // Size of the tiles
     sf::Texture tileset;                                        // Texture for the tiles
     std::vector<sf::IntRect> tileTextureRects;                  // Int Rects for the Texture of the tiles

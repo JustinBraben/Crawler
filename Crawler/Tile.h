@@ -13,14 +13,14 @@ enum class TileType {
 class Tile
 {
 public:
-    Tile(float startX, float startY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, const std::vector<sf::IntRect>& tileTextureRects, float hbOffset = 2.0f) :
+    Tile(float startX, float startY, float roomStartX, float roomStartY, int numTilesX, int numTilesY, int startTileSize, const sf::Texture& givenTileTexture, TileType type, const std::vector<sf::IntRect>& tileTextureRects, float hbOffset = 2.0f) :
         x(startX), y(startY), tileSize(startTileSize), tileType(type), hitboxOffset(hbOffset) {
 
         // Set the tileTexture
         tileSprite.setTexture(givenTileTexture);
 
         // Set the tile's position based on the constructor parameters, adjust based on tileSize
-        setPosition(startX * tileSize, startY * tileSize);
+        setPosition(startX * tileSize + (roomStartX * numTilesX), startY * tileSize + (roomStartY * numTilesY));
 
         switch (tileType) {
         case TileType::Wall:
@@ -60,8 +60,19 @@ public:
         y = newY;
         tileSprite.setPosition(x, y);
     }
-    void setType(TileType newTileType) {
+    void setType(TileType newTileType, const std::vector<sf::IntRect>& tileTextureRects) {
         tileType = newTileType;
+        switch (tileType) {
+        case TileType::Wall:
+            tileSprite.setTextureRect(tileTextureRects[9]); // wall texture coordinates
+            break;
+        case TileType::Floor:
+            tileSprite.setTextureRect(tileTextureRects[4]);  // floor texture coordinates
+            break;
+        case TileType::Door:
+            tileSprite.setTextureRect(getTextureRect(29, 3)); // door texture coordinates
+            break;
+        }
     }
 
     // Member Functions
