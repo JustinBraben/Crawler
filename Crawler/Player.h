@@ -4,13 +4,13 @@
 class Player {
 public:
     // Constructors
-    Player(float startX, float startY, int startHealth, int playerSize, const std::string& spritePath, Room& room) {
+    Player(float startX, float startY, int startHealth, int playerSize, const std::string& spritePath, std::shared_ptr<Room> room) {
         x = startX;
         y = startY;
         tileSize = playerSize;
         halfTileSize = static_cast<float>(tileSize / 2);
         health = startHealth;
-        currentRoom = &room;
+        currentRoom = room;
 
         // Check for collision with wall tiles at the start position
         while (checkCollision(x, y, room, TileType::Wall)) {
@@ -73,8 +73,8 @@ public:
         return playerTile;
     }
 
-    bool checkCollision(float nextX, float nextY, Room& room, TileType checkTileType, int radius = 1) {
-        auto& tileSet = room.getTiles();
+    bool checkCollision(float nextX, float nextY, std::shared_ptr<Room> room, TileType checkTileType, int radius = 1) {
+        auto& tileSet = room->getTiles();
         sf::Vector2i playerTile = getPlayerTile();
         sf::Vector2f nextHitBoxPos(nextX, nextY);
         sf::Vector2f vec2fTileSize(tileSize, tileSize);
@@ -100,11 +100,11 @@ public:
 
 
 
-    void update(Room& room, sf::Time deltaTime, sf::Event evnt) {
+    void update(std::shared_ptr<Room> room, sf::Time deltaTime, sf::Event evnt) {
         float movementSpeed = 150.0f;
         float dxMovement = 0.0f;
         float dyMovement = 0.0f;
-        currentRoom = &room;
+        currentRoom = room;
         
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             dxMovement -= 1.0f;
@@ -164,8 +164,8 @@ public:
 
 
 
-    void draw(sf::RenderWindow& window, const Room& room) {
-        if (currentRoom == &room) {
+    void draw(sf::RenderWindow& window, const std::shared_ptr<Room> room) {
+        if (currentRoom == room) {
             window.draw(sprite);
         }
     }
@@ -176,6 +176,6 @@ private:
     bool isFacingRight;
     sf::Texture texture;
     sf::Sprite sprite;
-    Room* currentRoom;
+    std::shared_ptr<Room> currentRoom;
 };
 

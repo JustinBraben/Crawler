@@ -6,8 +6,7 @@
 #include <vector>
 #include <string>
 #include "Player.h"
-#include "Room.h"
-#include "Tile.h"
+#include "RoomManager.h"
 #include "Camera.h"
 
 // Define constants for window size, tile size, and other game settings
@@ -147,14 +146,17 @@ int main() {
     }
     */
 
-    Room curRoom(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, TILE_SIZE);
+    RoomManager gameRooms(1, 1, NUM_TILES_X, NUM_TILES_Y, TILE_SIZE, fantasyTileTexture);
+    //auto curRoom = gameRooms.getPlayerRoom();
+
+    //Room curRoom(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, TILE_SIZE);
 
     //Room room1(0, 0, NUM_TILES_X, NUM_TILES_Y, fantasyTileTexture, 24);
-    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", curRoom);
+    Player player(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", gameRooms.getPlayerRoom());
 
-    Camera camera(window);
+    //Camera camera(window);
 
-    camera.setRoomView(curRoom, TILE_SIZE);
+    //camera.setRoomView(*(gameRooms.getPlayerRoom()), TILE_SIZE);
 
     int roomX = 0, roomY = 0;
     //auto& currentRoom = allRooms[roomX][roomY];
@@ -208,13 +210,13 @@ int main() {
         //}
 
         // Update player
-        player.update(curRoom, deltaTime, evnt);
+        player.update(gameRooms.getPlayerRoom(), deltaTime, evnt);
 
         // Clear the window and draw the map and player
         window.clear();
-        //drawMap(map, window);
-        curRoom.draw(window);
-        player.draw(window, curRoom);
+        gameRooms.draw(window);
+        //gameRooms.getPlayerRoom()->draw(window);
+        player.draw(window, gameRooms.getPlayerRoom());
         window.display();
     }
 
