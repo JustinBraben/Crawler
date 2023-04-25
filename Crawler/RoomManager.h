@@ -39,6 +39,13 @@ public:
         if (!rooms.empty()) {
             playerRoom = rooms.at(0);
         }
+
+        /*
+        for (auto& doors : playerRoom->getDoors()) {
+            std::cout << "door at position : " << doors->position.x << ", " << doors->position.y << '\n';
+            std::cout << "linked to door at position : " << doors->linkedPosition.x << ", " << doors->linkedPosition.y << '\n';
+        }
+        */
     }
 
     // Accessors
@@ -78,22 +85,26 @@ public:
         rooms[roomId2]->generateDoorPositions(roomId1);
 
         // Get the door positions from both rooms
-        auto& room1Doors = rooms[roomId1]->getDoors();
-        auto& room2Doors = rooms[roomId2]->getDoors();
+        auto room1Doors = rooms[roomId1]->getDoors();
+        auto room2Doors = rooms[roomId2]->getDoors();
 
         // Link the doors
         if (!room1Doors.empty() && !room2Doors.empty()) {
-            room1Doors.back().linkedRoomId = roomId2;
-            room1Doors.back().linkedPosition = room2Doors.back().position;
-            room2Doors.back().linkedRoomId = roomId1;
-            room2Doors.back().linkedPosition = room1Doors.back().position;
+            room1Doors.front()->linkedRoomId = roomId2;
+            room1Doors.back()->linkedPosition = room2Doors.back()->position;
+            room2Doors.back()->linkedRoomId = roomId1;
+            room2Doors.back()->linkedPosition = room1Doors.back()->position;
         }
     }
 
+    void setCurrentRoom(int roomId) {
+        playerRoom = rooms[roomId];
+    }
+    /*
     void addDoor(int roomId, const Door& door) {
         rooms[roomId]->addDoor(door);
     }
-
+    */
 private:
     std::shared_ptr<Room> playerRoom;
     std::unordered_map<int, std::shared_ptr<Room>> rooms;

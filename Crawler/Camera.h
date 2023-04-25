@@ -11,9 +11,9 @@ public:
         window.setView(view);
     }
 
-    void setRoomView(Room& room, int tileSize) {
-        sf::Vector2f roomSize(room.getWidth() * tileSize, room.getHeight() * tileSize);
-        sf::Vector2f roomPos(room.getX() * tileSize, room.getY() * tileSize);
+    void setRoomView(std::shared_ptr<Room> room, int tileSize) {
+        sf::Vector2f roomSize(room->getWidth() * tileSize, room->getHeight() * tileSize);
+        sf::Vector2f roomPos(room->getX() * tileSize, room->getY() * tileSize);
         view.setSize(roomSize);
         view.setCenter(roomPos + roomSize / 2.f);
     }

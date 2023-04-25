@@ -33,7 +33,7 @@ public:
     auto getTileSize() const { return tileSize; }
     const auto& getTileset() { return tileset; }
     auto& getTiles() { return tiles; }
-    auto& getDoors() { return doors; }
+    auto getDoors() { return doors; }
     // Get IntRect for tile mapping textures
     sf::IntRect getTextureRect(int x, int y) const {
         return sf::IntRect(x * tileSize, y * tileSize, tileSize, tileSize);
@@ -74,36 +74,37 @@ public:
 
         int doorPosition;
         std::uniform_int_distribution<> doorPositionDist;
-        Door newDoor;
-        newDoor.linkedRoomId = adjacentRoomId;
+        //Door newDoor;
+        auto newDoor = std::make_shared<Door>();
+        newDoor->linkedRoomId = adjacentRoomId;
 
         switch (doorSide) {
         case 0: // Left
             doorPositionDist = std::uniform_int_distribution<>(1, height - 2);
             doorPosition = doorPositionDist(gen);
-            newDoor.position = sf::Vector2i(0, doorPosition);
+            newDoor->position = sf::Vector2i(0, doorPosition);
             break;
         case 1: // Right
             doorPositionDist = std::uniform_int_distribution<>(1, height - 2);
             doorPosition = doorPositionDist(gen);
-            newDoor.position = sf::Vector2i(width - 1, doorPosition);
+            newDoor->position = sf::Vector2i(width - 1, doorPosition);
             break;
         case 2: // Top
             doorPositionDist = std::uniform_int_distribution<>(1, width - 2);
             doorPosition = doorPositionDist(gen);
-            newDoor.position = sf::Vector2i(doorPosition, 0);
+            newDoor->position = sf::Vector2i(doorPosition, 0);
             break;
         case 3: // Bottom
             doorPositionDist = std::uniform_int_distribution<>(1, width - 2);
             doorPosition = doorPositionDist(gen);
-            newDoor.position = sf::Vector2i(doorPosition, height - 1);
+            newDoor->position = sf::Vector2i(doorPosition, height - 1);
             break;
         }
 
         // Add the door to the doors vector
-        doors.push_back(newDoor);
+        doors.emplace_back(newDoor);
 
-        setTile(newDoor.position.x, newDoor.position.y, TileType::Door);
+        setTile(newDoor->position.x, newDoor->position.y, TileType::Door);
     }
 
     Door generateDoor() {
@@ -204,10 +205,11 @@ public:
         }
         return containsPosition(getTilesOfType(tileTypeCheck), pos);
     }
-
+    /*
     void addDoor(const Door& door) {
         doors.push_back(door);
     }
+    */
 private:
     float startX, startY;                                       // Top left corner coordinates for the room
     float endX, endY;                                           // Bottom right corner coordinates for the room
@@ -216,5 +218,5 @@ private:
     sf::Texture tileset;                                        // Texture for the tiles
     std::vector<sf::IntRect> tileTextureRects;                  // Int Rects for the Texture of the tiles
     std::vector<std::vector<std::shared_ptr<Tile>>> tiles;      // 2D vector of Tiles for the room
-    std::vector<Door> doors;
+    std::vector<std::shared_ptr<Door>> doors;
 };

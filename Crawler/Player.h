@@ -7,6 +7,7 @@ public:
     Player(float startX, float startY, int startHealth, int playerSize, const std::string& spritePath, std::shared_ptr<Room> room) {
         x = startX;
         y = startY;
+        futurePosition = sf::Vector2f({ x, y });
         tileSize = playerSize;
         halfTileSize = static_cast<float>(tileSize / 2);
         health = startHealth;
@@ -32,6 +33,8 @@ public:
     // Accessors
     auto getX() const { return x; }
     auto getY() const { return y; }
+        //Vector2f currentPlayerPosition = player_.getPosition();
+        //Vector2f futurePlayerPosition = player_.getFuturePosition();
     float getDistance(sf::Vector2f tar1, sf::Vector2f tar2) {
         float dx = tar2.x - tar1.x;
         float dy = tar2.y - tar1.y;
@@ -44,6 +47,9 @@ public:
 
     sf::Vector2f getPlayerTopLeft() {
         return sf::Vector2f(sprite.getGlobalBounds().left, sprite.getGlobalBounds().top);
+    }
+    sf::Vector2f getFuturePosition() {
+        return futurePosition;
     }
     
 
@@ -193,6 +199,7 @@ private:
     float x, y, halfTileSize;
     int health, tileSize;
     bool isFacingRight;
+    sf::Vector2f futurePosition;
     sf::Texture texture;
     sf::Sprite sprite;
     std::shared_ptr<Room> currentRoom;

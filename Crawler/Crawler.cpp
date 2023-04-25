@@ -139,9 +139,9 @@ int main() {
 
     auto player = std::make_shared<Player>(200, 200, 100, TILE_SIZE, "Oryx/oryx_16bit_fantasy_creatures_trans.png", gameRooms.getPlayerRoom());
 
-    //Camera camera(window);
+    Camera camera(window);
 
-    //camera.setRoomView(*(gameRooms.getPlayerRoom()), TILE_SIZE);
+    camera.setRoomView(gameRooms.getPlayerRoom(), TILE_SIZE);
 
     // Game loop
     while (window.isOpen()) {
