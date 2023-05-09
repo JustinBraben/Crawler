@@ -1,4 +1,4 @@
-# Title: "Crawler" Technical Design Document
+# Title: "Crawler" Technical Design Document (Entity Component System)
 
 ## Language and Libraries
 
@@ -14,22 +14,26 @@
 -   Resource management (textures, sounds, fonts)
 -   Event handling
 
-### 2. Rendering
+### 2. Entity Component System (ECS)
 
--   Tile-based rendering system for dungeon levels
--   Sprite rendering for characters, enemies, and items
+-   Implement a custom ECS engine to efficiently manage entities, components, and systems
+-   Entities as unique IDs (e.g., using `std::size_t`)
+-   Components as plain data structures
+-   Systems as classes with an `update()` method to process entities with specific component sets
+
+### 3. Rendering
+
+-   Rendering system for drawing entities with `SpriteComponent` and `TransformComponent`
 -   Text rendering for UI elements
--   Particle system for visual effects
 
-### 3. Audio
+### 4. Audio
 
--   Background music and sound effect playback
+-   Audio system for background music and sound effect playback based on `AudioComponent`
 -   Volume and audio settings
 
-### 4. Input
+### 5. Input
 
--   Keyboard and mouse input handling
--   Gamepad input handling (optional)
+-   Input system for handling keyboard, mouse, and gamepad input based on `InputComponent`
 -   Keybinding configuration
 
 ## Data Structures and Algorithms
@@ -40,35 +44,33 @@
     -   Randomized Prim's Algorithm for maze generation
     -   Cellular Automata for cave-like areas
     -   Binary Space Partitioning for room-based dungeons
--   Data structures for representing dungeon layout:
-    -   2D grid of tile objects
-    -   Graph to represent connectivity between rooms and corridors
+-   Dungeon generation system that creates entities and assigns components (e.g., `TransformComponent`, `SpriteComponent`, `ColliderComponent`) based on the generated layout
 
 ### 2. Pathfinding and AI
 
--   A* algorithm for pathfinding and enemy AI movement
--   Data structures for representing AI behaviors and state machines
+-   A* algorithm for pathfinding
+-   AI system to process entities with `AIComponent` and `PathComponent`
 
 ### 3. Character and Enemy Entities
 
--   Object-Oriented design using inheritance and composition
--   Base entity class with common attributes and methods (position, health, etc.)
--   Derived classes for player characters and enemy types with unique attributes and behaviors
--   Component-based design for managing abilities, status effects, and AI behaviors
+-   Components for representing common attributes (e.g., `TransformComponent`, `HealthComponent`, `SpriteComponent`)
+-   Additional components for specific functionality (e.g., `PlayerControlComponent`, `AIComponent`, `InventoryComponent`, `EquipmentComponent`)
+-   Systems to manage entities with specific component sets (e.g., `PlayerControlSystem`, `AISystem`, `InventorySystem`, `EquipmentSystem`)
 
 ### 4. Collision Detection
 
--   Axis-Aligned Bounding Box (AABB) collision detection for tile-based environments
+-   `ColliderComponent` for representing entity colliders
+-   Collision system to handle collisions between entities with `ColliderComponent` and `TransformComponent`
 -   Quadtree data structure for efficient broad-phase collision detection
 
 ### 5. Inventory and Equipment
 
--   Container classes for inventory and equipment management (e.g., `std::vector`, `std::unordered_map`)
--   Custom item class hierarchy for different types of items (weapons, armor, consumables)
+-   Components for representing inventory and equipment (e.g., `InventoryComponent`, `EquipmentComponent`)
+-   Inventory and equipment systems for managing item interactions and equipping/unequipping items
 
 ### 6. Saving and Loading
 
--   Serialization and deserialization of game data (e.g., character stats, dungeon layout, inventory)
+-   Serialization and deserialization of game data (e.g., component data, dungeon layout)
 -   File input/output using C++ streams (e.g., `std::ifstream`, `std::ofstream`)
 -   JSON or binary format for saved game data
 
@@ -92,3 +94,6 @@
 -   Consistent naming conventions for variables, functions, and classes
 -   Use of `auto` keyword to improve code readability and maintainability
 -   Organize code using namespaces and folder structure
+-   Regular code reviews and refactoring to maintain code quality
+
+By using an Entity Component System (ECS) architecture for the "Dungeon Explorer" game, you will be able to create a flexible and efficient game engine that allows entities to have any number of specified components. Systems will control how these entities behave, resulting in a highly modular and adaptable game structure.
