@@ -81,17 +81,17 @@
 -   Camera system for updating the camera view based on the player entity's position and current room dimensions
 -   Smooth camera transitions using interpolation techniques
    
-## 7.1. Camera Entity
+### 7.1. Camera Entity
 
 -   Create a camera entity with a `CameraComponent` and a `TransformComponent`
 -   Camera system updates the camera entity's position based on the player entity's position and current room dimensions
 
-## 7.2. Camera Movement and Transitions
+### 7.2. Camera Movement and Transitions
 
 -   Use interpolation (e.g., linear interpolation or a smoothing function) to smoothly move the camera between rooms
 -   Update the camera view's center and size based on the camera entity's `TransformComponent` and the game window's dimensions
 
-## 7.3. Camera View and Rendering
+### 7.3. Camera View and Rendering
 
 -   Maintain an `sf::View` instance in the camera system to control the visible area of the game window
 -   Apply the camera view to the game window before rendering entities to ensure the visible area is correctly updated
