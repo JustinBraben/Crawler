@@ -1,4 +1,4 @@
-# Title: "Crawler" Technical Design Document (Entity Component System)
+# "Crawler" Technical Design Document (Entity Component System)
 
 ## Language and Libraries
 
