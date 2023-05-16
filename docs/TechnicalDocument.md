@@ -74,6 +74,35 @@
 -   File input/output using C++ streams (e.g., `std::ifstream`, `std::ofstream`)
 -   JSON or binary format for saved game data
 
+## Scene Management System
+
+-   In order to manage the different scenes of the game (e.g., menu, gameplay, game won), a Scene Management System can be implemented
+-   This system will be responsible for controlling the game flow, orchestrating the transitions between different scenes, and managing the lifecycle of each scene
+
+### 1. Scene Base Class
+
+-   Create a base Scene class that other specific scenes (e.g., `Scene_Menu`, `Scene_Play`, `Scene_Won`) can inherit from
+-   This base class should include methods for initializing the scene, handling input, updating the scene, and rendering the scene
+-   These methods will be overridden by each specific scene
+-   Also, this class will include a method for managing scene transitions
+
+### 2. Scene Manager Class
+
+-   Implement a `SceneManager` class that will be responsible for managing the game's scenes
+-   The `SceneManager` will maintain a stack-like structure to manage scenes, the current active scene will be on the top of the stack
+-   When transitioning between scenes, the `SceneManager` will handle pushing new scenes to the stack, popping scenes from the stack, or replacing the current scene
+
+### 3. Scene Implementations
+
+-   Implement specific scene classes that inherit from the base `Scene` class, these could include `Scene_Menu`, `Scene_Play`, `Scene_Won`, etc
+-   Each scene will override the methods from the base `Scene` class for initializing the scene, handling input, updating the scene, and rendering the scene
+
+### 4. Scene Transitions
+
+-   When a scene transition occurs (for example, the player moves from the menu scene to the gameplay scene), the `SceneManager` will push the new scene onto the stack, making it the active scene
+-   The previous scene can either be paused or destroyed depending on the needs of the game
+-   Transitions between scenes can be enhanced with various effects (fade in/out, slide, etc.) to provide a more polished game experience
+
 ## Additional Libraries and Tools
 
 ### 1. ImGui
