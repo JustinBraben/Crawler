@@ -1,4 +1,4 @@
-#include "factories.hpp"
+#include "Factories.hpp"
 
 entt::entity makePlayer(entt::registry &reg, sf::Sprite &sprite, sf::IntRect& textureRect)
 {
