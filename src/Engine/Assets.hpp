@@ -1,3 +1,6 @@
+#ifndef ASSETS_HPP
+#define ASSETS_HPP
+
 #include <map>
 #include <filesystem>
 
@@ -5,7 +8,8 @@
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 
-class Assets {
+class Assets 
+{
 private:
 	std::map<std::string, sf::Texture> m_textures;
 	//std::map<std::string, Animation> m_animations;
@@ -30,4 +34,7 @@ public:
 
 	void loadTexturesFromPath(std::string& folderPath);
 	void loadTexturesRecursive(const std::filesystem::path& folderPath);
+	void loadFontsRecursive(const std::filesystem::path& folderPath);
 };
+
+#endif // ASSETS_HPP

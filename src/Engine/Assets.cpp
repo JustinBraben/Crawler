@@ -13,6 +13,7 @@ Assets::Assets(std::filesystem::path& folderPath)
 void Assets::init(std::filesystem::path& folderPath)
 {
 	loadTexturesRecursive(folderPath);
+	loadFontsRecursive(folderPath);
 }
 
 void Assets::addTexture(const std::string& name, const std::string& path) {
@@ -131,8 +132,8 @@ void Assets::loadTexturesRecursive(const std::filesystem::path& folderPath)
 		{
 			auto extension = filePath.extension().string();
 
-			// Skip .txt files
-			if (extension != ".txt")
+			// Only do .png files (for now)
+			if (extension == ".png")
 			{
 				auto stem = filePath.stem().string();
 
@@ -145,6 +146,41 @@ void Assets::loadTexturesRecursive(const std::filesystem::path& folderPath)
 				else
 				{
 					m_textures[stem] = texture;
+				}
+			}
+		}
+	}
+}
+
+void Assets::loadFontsRecursive(const std::filesystem::path& folderPath)
+{
+	for (auto& entry : std::filesystem::directory_iterator(folderPath))
+	{
+		auto filePath = entry.path();
+
+		if (std::filesystem::is_directory(filePath))
+		{
+			// Recursive call for subdirectories
+			loadFontsRecursive(filePath);
+		}
+		else
+		{
+			auto extension = filePath.extension().string();
+
+			// Only do .ttf files (for now)
+			if (extension == ".ttf")
+			{
+				auto stem = filePath.stem().string();
+
+				sf::Font font;
+				if (!font.loadFromFile(filePath.string()))
+				{
+					// Handle error..
+					std::cerr << "Error loading font from file: " << filePath << "\n";
+				}
+				else
+				{
+					m_fonts[stem] = font;
 				}
 			}
 		}
