@@ -32,10 +32,10 @@ FetchContent_MakeAvailable(EnTT)
 message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 
 # Create an executable target named "flappy" with the source file src/main.cpp
-add_executable(${projectName} src/main.cpp "src/core/app.cpp" "src/Engine/GameEngine.cpp")
+add_executable(${projectName} src/main.cpp "src/core/app.cpp" "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp")
 
 # Link the executable against SFML and EnTT libraries
-target_link_libraries(${projectName} PRIVATE sfml-graphics EnTT::EnTT)
+target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT)
 
 # Set the C++ standard to C++17 for the "flappy" target
 target_compile_features(${projectName} PRIVATE cxx_std_17)
