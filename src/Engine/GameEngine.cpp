@@ -9,10 +9,10 @@ void GameEngine::init()
 {
 	// TODO: go through the assets folder
 	// and add every texture to its own spot in the texture map
-	std::filesystem::path assetsPath("../../../../assets");
+	std::filesystem::path assetsPath(assetsLoadPath);
 	m_assets = Assets(assetsPath);
 
-	m_window.create(sf::VideoMode(1280, 768), "Crawler");
+	m_window.create(sf::VideoMode(width, height), "Crawler");
 	m_window.setFramerateLimit(144);
 
 	changeScene("MENU", std::make_shared<Scene_Menu>(this));

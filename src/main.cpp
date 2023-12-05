@@ -1,6 +1,6 @@
-#include "core/app.hpp"
+#include "Engine/GameEngine.hpp"
 
 int main() {
-	Application app;
-	app.run();
+	GameEngine game;
+	game.run();
 }

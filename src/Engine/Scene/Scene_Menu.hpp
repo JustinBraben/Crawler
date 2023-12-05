@@ -9,8 +9,6 @@
 #include <entt/entity/registry.hpp>
 #include <SFML/Graphics.hpp>
 
-class GameEngine;	// forward declaration
-
 class Scene_Menu : public Scene
 {
 protected:

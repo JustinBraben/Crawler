@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Set the variable projectName to "flappy"
-set(projectName "flappy")
+set(projectName "Crawler")
 
 # Declare the project with the specified language (C++)
 project(${projectName} LANGUAGES CXX)
@@ -32,7 +32,7 @@ FetchContent_MakeAvailable(EnTT)
 message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 
 # Create an executable target named "flappy" with the source file src/main.cpp
-add_executable(${projectName} src/main.cpp "src/core/app.cpp" "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp")
+add_executable(${projectName} src/main.cpp  "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp" "src/Engine/Scene/Scene_Play.cpp" "src/core/Factories.cpp")
 
 # Link the executable against SFML and EnTT libraries
 target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT)

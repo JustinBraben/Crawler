@@ -4,6 +4,8 @@
 #include "Assets.hpp"
 #include "Scene/Scene_Menu.hpp"
 
+#include "../configs/Constants.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <entt/entity/registry.hpp>
 #include <iostream>
