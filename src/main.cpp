@@ -1,7 +1,6 @@
-#include <iostream>
-#include "Game.hpp"
+#include "core/app.hpp"
 
 int main() {
-	std::cout << "hello world\n";
-	return 1;
+	Application app;
+	app.run();
 }
