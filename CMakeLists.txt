@@ -1,69 +1,54 @@
-# CMakeList.txt : CMake project for ECSEngine2D, include source and define
-# project specific logic here.
-#
+# Specify the minimum required CMake version
+cmake_minimum_required(VERSION 3.16)
 
-# Set the minimum required version of CMake.
-cmake_minimum_required(VERSION 3.20)
+# Set the variable projectName to "flappy"
+set(projectName "flappy")
 
-# Print the CMake toolchain file path.
-message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
+# Declare the project with the specified language (C++)
+project(${projectName} LANGUAGES CXX)
 
-# Ensure that we are not building in the source directory.
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-  message(FATAL_ERROR "Building in the source directory is not allowed. Please use a separate build directory.")
+# Set the output directory for executables to bin/
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Define an option to build shared libraries (default is OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
+# Include FetchContent module for managing external dependencies
+include(FetchContent)
+
+# Fetch and declare SFML as an external dependency
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x)
+FetchContent_MakeAvailable(SFML)
+
+# Fetch and declare EnTT as an external dependency
+FetchContent_Declare(EnTT
+    GIT_REPOSITORY https://github.com/skypjack/entt.git
+    GIT_TAG v3.12.2)  # Specify the desired tag or commit
+FetchContent_MakeAvailable(EnTT)
+
+# Debug info on where the binary directory is
+message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
+
+# Create an executable target named "flappy" with the source file src/main.cpp
+add_executable(${projectName} src/main.cpp "src/core/app.cpp" "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp")
+
+# Link the executable against SFML and EnTT libraries
+target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT)
+
+# Set the C++ standard to C++17 for the "flappy" target
+target_compile_features(${projectName} PRIVATE cxx_std_17)
+
+# Check if the platform is Windows
+if(WIN32)
+    # Add a custom command to copy OpenAL DLL before building
+    add_custom_command(
+        TARGET ${projectName}
+        COMMENT "Copy OpenAL DLL"
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:${projectName}>
+        VERBATIM)
 endif()
 
-# Define the project and set the C++ standard to 17.
-# ${PROJECT_NAME} will now be myproject
-project(myproject CXX)
-set(CMAKE_CXX_STANDARD 17)
-
-# Set the binary directory to /build within the source directory.
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
-
-# Define the SFML components to use.
-set(SFML_COMPONENTS system window graphics network audio)
-
-# Add any library files you want
-#add_subdirectory(${PROJECT_SOURCE_DIR}/include/assignment1)
-#add_subdirectory(${PROJECT_SOURCE_DIR}/include/assignment2)
-
-# Add source files to the project's executable and include the src directory.
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/main.cpp)
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/src)
-
-# Enforce treating warnings as errors for GNU and Clang compilers.
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  add_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -O3 -g -fPIC -fsanitize=address -fsanitize=undefined --coverage)
-endif()
-
-# Enforce treating warnings as errors for MSVC compiler.
-if(MSVC)
-  # Treat warnings as errors
-  target_compile_options(${PROJECT_NAME} PRIVATE /WX /W4 /w14640 /permissive)
-  
-  # Enable debugging information and code coverage.
-  target_compile_options(${PROJECT_NAME} PRIVATE /Zi /DEBUG)
-  
-  # Enable code analysis
-  target_compile_options(${PROJECT_NAME} PRIVATE /analyze)
-
-  # Enable runtime security checks
-  target_compile_options(${PROJECT_NAME} PRIVATE /guard:cf)
-endif()
-
-# Find and require the SFML library, ensuring it is at least version 2.5.
-find_package(SFML COMPONENTS ${SFML_COMPONENTS} REQUIRED)
-if(SFML_VERSION VERSION_LESS "2.5")
-  message(FATAL_ERROR "SFML version must be at least 2.5")
-endif()
-
-# Print the SFML components being used.
-foreach(component IN LISTS SFML_COMPONENTS)
-  message(STATUS "Checking SFML component: ${component}")
-endforeach()
-
-# Link the SFML libraries to the project's executable.
-target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
-
-# TODO: Add tests and install targets if needed.
+# Install the "flappy" target
+install(TARGETS ${projectName})
