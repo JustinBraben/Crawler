@@ -9,6 +9,7 @@
 #include "../Components/CPosition.hpp"
 #include "../Components/CScale.hpp"
 #include "../Components/CSprite.hpp"
+#include "../Components/CTile.hpp"
 #include "../Components/CVelocity.hpp"
 
 class Scene_Play : public Scene {
@@ -22,6 +23,7 @@ protected:
 	void createLevel();
 
 	void playerRender();
+	void tileRender();
 public:
 
 	Scene_Play(GameEngine* gameEngine);

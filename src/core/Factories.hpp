@@ -10,6 +10,7 @@
 #include "../Engine/Components/CPosition.hpp"
 #include "../Engine/Components/CScale.hpp"
 #include "../Engine/Components/CSprite.hpp"
+#include "../Engine/Components/CTile.hpp"
 #include "../Engine/Components/CVelocity.hpp"
 
 #include "../configs/Constants.hpp"
@@ -17,5 +18,6 @@
 #include <entt/entity/registry.hpp>
 
 entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect);
+entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 
 #endif // !FACTORIES_HPP

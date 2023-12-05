@@ -26,12 +26,20 @@ void Scene_Play::createLevel()
 	//playerSprite.setTextureRect(playerRect);
 
 	const auto playerEntity = makePlayer(m_reg, playerSprite, playerRect);
+
+	sf::Sprite tileSprite;
+	auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
+	tileSprite.setTexture(tileTexture);
+	sf::IntRect tileRect = { 34 * 32, 1 * 32, 32, 32 };
+	sf::Vector2f tilePos = { 300.f, 300.f };
+
+	const auto tileEntity = makeTile(m_reg, tileSprite, tileRect, tilePos);
 	std::cout << "Created Level with new Player \n";
 }
 
 void Scene_Play::playerRender()
 {
-	const auto playerView = m_reg.view<CBoundingBox, CPosition, CVelocity, CScale, CSprite>();
+	const auto playerView = m_reg.view<CPlayer, CBoundingBox, CPosition, CVelocity, CScale, CSprite>();
 
 	for (const auto& player : playerView)
 	{
@@ -40,7 +48,27 @@ void Scene_Play::playerRender()
 		auto& velocity = playerView.get<CVelocity>(player).vel;
 		auto& scale = playerView.get<CScale>(player).scale;
 		auto& sprite = playerView.get<CSprite>(player).id;
-		sprite.setTextureRect({ 0, 0, 32, 32 });
+		auto& texRect = playerView.get<CSprite>(player).texRect;
+		sprite.setTextureRect(texRect);
+		sprite.setOrigin(box.halfSize);
+		sprite.setPosition(pos);
+		sprite.setScale(scale);
+		m_game->window().draw(sprite);
+	}
+}
+
+void Scene_Play::tileRender()
+{
+	const auto tileView = m_reg.view<CTile, CBoundingBox, CPosition, CScale, CSprite>();
+
+	for (const auto& tile : tileView)
+	{
+		auto& pos = tileView.get<CPosition>(tile).pos;
+		auto& box = tileView.get<CBoundingBox>(tile);
+		auto& scale = tileView.get<CScale>(tile).scale;
+		auto& sprite = tileView.get<CSprite>(tile).id;
+		auto& texRect = tileView.get<CSprite>(tile).texRect;
+		sprite.setTextureRect(texRect);
 		sprite.setOrigin(box.halfSize);
 		sprite.setPosition(pos);
 		sprite.setScale(scale);
@@ -88,6 +116,8 @@ void Scene_Play::sRender()
 	else { m_game->window().clear(sf::Color(50, 50, 150)); }
 
 	playerRender();
+
+	tileRender();
 
 	m_game->window().display();
 }

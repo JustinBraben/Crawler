@@ -5,6 +5,7 @@
 
 struct CSprite {
 	sf::Sprite id;
+	sf::IntRect texRect;
 };
 
 #endif // !CSPRITE_HPP
