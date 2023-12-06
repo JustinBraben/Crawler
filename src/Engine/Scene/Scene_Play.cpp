@@ -35,9 +35,7 @@ void Scene_Play::init()
 	registerAction(sf::Keyboard::A, "MOVE_LEFT");
 	registerAction(sf::Keyboard::D, "MOVE_RIGHT");
 
-	std::ifstream input("../../../../data/saves/level1.json");
-	json data = json::parse(input);
-	//auto textures = data["texures"];
+	loadTextureRects();
 
 	createLevel();
 }
@@ -112,6 +110,115 @@ void Scene_Play::createLevel()
 	std::cout << "width is : " << data["width"] << "\n";
 	std::cout << "height is : " << data["height"] << "\n";
 	std::cout << "entities is : " << data["entities"] << "\n";*/
+}
+
+void Scene_Play::loadTextureRects()
+{
+	std::ifstream input("../../../../src/configs/level1.json");
+	if (!input.is_open())
+	{
+		std::cout << "Failed to open the file.\n";
+	}
+	json jsonData;
+	input >> jsonData;
+	input.close();
+
+	std::cout << jsonData["textures"] << "\n";
+
+	if (jsonData.contains("textures") && jsonData["textures"].is_array())
+	{
+		for (const auto& texture : jsonData["textures"])
+		{
+			const auto& textureName = texture["texture"];
+			const auto& textureRects = texture["textureRects"];
+
+			std::cout << "Loading texture named : " << textureName << "\n";
+
+			if (textureRects.is_array())
+			{
+
+				for (const auto& textureRect : textureRects)
+				{
+					std::cout << "Loading texture rect named : " << textureRect["name"] << "\n";
+					std::map<std::string, sf::IntRect> intRectMap;
+					intRectMap[textureRect["name"]] = sf::IntRect(
+						textureRect["x"] * gameTileSizeX,
+						textureRect["y"] * gameTileSizeY,
+						textureRect["width"],
+						textureRect["height"]
+					);
+
+					m_textureRectMap[textureName][textureRect["name"]] = intRectMap[textureRect["name"]];
+				}
+			}
+		}
+	}
+}
+
+void Scene_Play::exportLevelToJson(std::string& filePath)
+{
+	json levelData;
+
+	// Populate the JSON object with your data
+	levelData["width"] = 24;
+	levelData["height"] = 24;
+
+	// Example entities array
+	json entities = json::array();
+
+	auto allView = m_reg.view<CPosition, CTile, CName>();
+	for (const auto& entity : allView)
+	{
+		auto& pos = allView.get<CPosition>(entity).pos;
+		auto& name = allView.get<CName>(entity).name;
+		auto gridPos = pixelToGrid(pos);
+		//std::cout << "Entity at position ( " << pos.x << ", " << pos.y << " )\n";
+		entities.push_back({ {"type", name}, {"x", gridPos.x}, {"y", gridPos.y} });
+	}
+	levelData["entities"] = entities;
+
+	json textures = json::array();
+
+	// Loop through all textures and associated texture rects to save in your level
+	for (const auto& [textureName, textureRectMap] : m_textureRectMap)
+	{
+		json textureRectArray = json::array();
+
+		for (const auto& [textureRectName, textureIntRect] : textureRectMap)
+		{
+			textureRectArray.push_back(
+				{
+					{ "name", textureRectName },
+					{ "x", textureIntRect.left / gameTileSizeX },
+					{ "y", textureIntRect.top / gameTileSizeY },
+					{ "width", textureIntRect.width },
+					{ "height", textureIntRect.height }
+				}
+			);
+		}
+
+		textures.push_back(
+			{
+				{"texture", textureName},
+				{"textureRects", textureRectArray}
+			}
+		);
+	}
+
+	levelData["textures"] = textures;
+
+	// Convert JSON object to string for writing to a file
+	std::string jsonString = levelData.dump(4); // Use pretty printing with an indentation of 4 spaces
+
+	// Print the JSON string
+	// std::cout << jsonString << "\n";
+
+	// Write JSON string to a file
+	std::ofstream outputFile(filePath);
+	outputFile << jsonString;
+	outputFile.close();
+
+	std::cout << "Exporting entities to json\n";
 }
 
 void Scene_Play::playerRender()
@@ -204,39 +311,8 @@ void Scene_Play::sDoAction(const Action& action)
 	{
 		if (action.name() == "EXPORT")
 		{
-
-			json levelData;
-
-			// Populate the JSON object with your data
-			levelData["width"] = 24;
-			levelData["height"] = 24;
-
-			// Example entities array
-			json entities = json::array();
-
-			auto allView = m_reg.view<CPosition, CTile, CName>();
-			for (const auto& entity : allView)
-			{
-				auto& pos = allView.get<CPosition>(entity).pos;
-				auto& name = allView.get<CName>(entity).name;
-				auto gridPos = pixelToGrid(pos);
-				std::cout << "Entity at position ( " << pos.x << ", " << pos.y << " )\n";
-				entities.push_back({ {"type", name}, {"x", gridPos.x}, {"y", gridPos.y} });
-			}
-			levelData["entities"] = entities;
-
-			// Convert JSON object to string for writing to a file
-			std::string jsonString = levelData.dump(4); // Use pretty printing with an indentation of 4 spaces
-
-			// Print the JSON string
-			std::cout << jsonString << "\n";
-
-			// Write JSON string to a file
-			std::ofstream outputFile("../../../../data/saves/level1.json");
-			outputFile << jsonString;
-			outputFile.close();
-
-			std::cout << "Exporting entities to json\n";
+			std::string levelPath = "../../../../data/saves/level1.json";
+			exportLevelToJson(levelPath);
 		}
 		if (action.name() == "QUIT")
 		{

@@ -29,6 +29,8 @@ protected:
 	void init();
 
 	void createLevel();
+	void loadTextureRects();
+	void exportLevelToJson(std::string& filePath);
 
 	void playerRender();
 	void tileRender();
