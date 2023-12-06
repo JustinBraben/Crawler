@@ -35,6 +35,10 @@ void Scene_Play::init()
 	registerAction(sf::Keyboard::A, "MOVE_LEFT");
 	registerAction(sf::Keyboard::D, "MOVE_RIGHT");
 
+	std::ifstream input("../../../../data/saves/level1.json");
+	json data = json::parse(input);
+	//auto textures = data["texures"];
+
 	createLevel();
 }
 

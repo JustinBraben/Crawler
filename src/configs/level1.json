@@ -166,44 +166,54 @@
       "y": 0
     }
   ],
-  "textures": {
-    "player1": {
+  "textures": [
+    {
       "texture": "players blue x1",
-      "x": 0,
-      "y": 0,
-      "width": 32,
-      "height": 32
+      "textureRects": [
+        {
+          "name": "player1",
+          "x": 0,
+          "y": 0,
+          "width": 32,
+          "height": 32
+        }
+      ]
     },
-    "floor1": {
+    {
       "texture": "tileset x1",
-      "x": 34,
-      "y": 1,
-      "width": 32,
-      "height": 32
-    },
-    "floor2": {
-      "texture": "tileset x1",
-      "x": 33,
-      "y": 1,
-      "width": 32,
-      "height": 32
-    },
-    "floor3": {
-      "texture": "tileset x1",
-      "x": 32,
-      "y": 1,
-      "width": 32,
-      "height": 32
-    },
-    "floor4": {
-      "texture": "tileset x1",
-      "x": 32,
-      "y": 2,
-      "width": 32,
-      "height": 32
+      "textureRects": [
+        {
+          "name": "floor1",
+          "x": 34,
+          "y": 1,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "name": "floor2",
+          "x": 33,
+          "y": 1,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "name": "floor3",
+          "x": 32,
+          "y": 1,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "name": "floor4",
+          "x": 32,
+          "y": 2,
+          "width": 32,
+          "height": 32
+        }
+      ]
     }
     // Add more textures as needed
-  },
+  ],
   "height": 24,
   "width": 24
 }
