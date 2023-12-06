@@ -30,6 +30,11 @@ void Scene_Play::init()
 	registerAction(sf::Keyboard::Escape, "QUIT");
 	registerAction(sf::Keyboard::P, "EXPORT");
 
+	registerAction(sf::Keyboard::W, "MOVE_UP");
+	registerAction(sf::Keyboard::S, "MOVE_DOWN");
+	registerAction(sf::Keyboard::A, "MOVE_LEFT");
+	registerAction(sf::Keyboard::D, "MOVE_RIGHT");
+
 	createLevel();
 }
 

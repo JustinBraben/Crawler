@@ -24,6 +24,7 @@ protected:
 	bool m_drawTextures = true;
 	bool m_drawCollision = false;
 	bool m_drawGrid = false;
+	std::map<std::string, std::map<std::string, sf::IntRect>> m_textureRectMap;
 
 	void init();
 
