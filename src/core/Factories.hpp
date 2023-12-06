@@ -6,6 +6,7 @@
 
 #include "../Engine/Components/CBoundingBox.hpp"
 #include "../Engine/Components/CEnemy.hpp"
+#include "../Engine/Components/CName.hpp"
 #include "../Engine/Components/CPlayer.hpp"
 #include "../Engine/Components/CPosition.hpp"
 #include "../Engine/Components/CScale.hpp"
@@ -19,6 +20,7 @@
 
 entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
+entt::entity makeFloor(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 
 void makeRoom(entt::registry& reg, sf::Sprite& sprite, sf::Vector2f& startingPos);
 

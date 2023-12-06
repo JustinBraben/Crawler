@@ -2,81 +2,161 @@
     "entities": [
         {
             "type": "floor",
+            "x": 7,
+            "y": 7
+        },
+        {
+            "type": "floor",
+            "x": 7,
+            "y": 6
+        },
+        {
+            "type": "floor",
+            "x": 7,
+            "y": 5
+        },
+        {
+            "type": "floor",
+            "x": 7,
+            "y": 4
+        },
+        {
+            "type": "floor",
+            "x": 6,
+            "y": 7
+        },
+        {
+            "type": "floor",
+            "x": 6,
+            "y": 6
+        },
+        {
+            "type": "floor",
+            "x": 6,
+            "y": 5
+        },
+        {
+            "type": "floor",
+            "x": 6,
+            "y": 4
+        },
+        {
+            "type": "floor",
+            "x": 5,
+            "y": 7
+        },
+        {
+            "type": "floor",
+            "x": 5,
+            "y": 6
+        },
+        {
+            "type": "floor",
+            "x": 5,
+            "y": 5
+        },
+        {
+            "type": "floor",
+            "x": 5,
+            "y": 4
+        },
+        {
+            "type": "floor",
+            "x": 4,
+            "y": 7
+        },
+        {
+            "type": "floor",
+            "x": 4,
+            "y": 6
+        },
+        {
+            "type": "floor",
+            "x": 4,
+            "y": 5
+        },
+        {
+            "type": "floor",
+            "x": 4,
+            "y": 4
+        },
+        {
+            "type": "tile",
             "x": 3,
             "y": 3
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 3,
             "y": 2
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 3,
             "y": 1
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 3,
             "y": 0
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 2,
             "y": 3
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 2,
             "y": 2
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 2,
             "y": 1
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 2,
             "y": 0
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 1,
             "y": 3
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 1,
             "y": 2
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 1,
             "y": 1
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 1,
             "y": 0
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 0,
             "y": 3
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 0,
             "y": 2
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 0,
             "y": 1
         },
         {
-            "type": "floor",
+            "type": "tile",
             "x": 0,
             "y": 0
         }

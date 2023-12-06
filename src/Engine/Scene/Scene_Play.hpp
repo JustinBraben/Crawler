@@ -13,6 +13,7 @@ using json = nlohmann::json;
 
 #include "../Components/CBoundingBox.hpp"
 #include "../Components/CPosition.hpp"
+#include "../Components/CName.hpp"
 #include "../Components/CScale.hpp"
 #include "../Components/CSprite.hpp"
 #include "../Components/CTile.hpp"
@@ -30,6 +31,7 @@ protected:
 
 	void playerRender();
 	void tileRender();
+	void floorRender();
 public:
 
 	Scene_Play(GameEngine* gameEngine);

@@ -57,6 +57,27 @@ void Scene_Play::createLevel()
 	{
 		for (float j = 0; j < 4; j++)
 		{
+			sf::Sprite floorSprite;
+			auto& floorTexture = m_game->getAssets().getTexture("tileset x1");
+			floorSprite.setTexture(floorTexture);
+			sf::IntRect floorRect = { 5 * 32, 0 * 32, 32, 32 };
+			sf::Vector2f floorPos = { i * 1, j * 1 };
+			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+			auto midPixelPos = gridToMidPixel(floorPos.x, floorPos.y, floorRect, scale);
+
+			const auto floorEntity = makeTile(
+				m_reg,
+				floorSprite,
+				floorRect,
+				midPixelPos
+			);
+		}
+	}
+
+	for (float i = 4; i < 8; i++)
+	{
+		for (float j = 4; j < 8; j++)
+		{
 			sf::Sprite tileSprite;
 			auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
 			tileSprite.setTexture(tileTexture);
@@ -65,7 +86,7 @@ void Scene_Play::createLevel()
 			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
 			auto midPixelPos = gridToMidPixel(tilePos.x, tilePos.y, tileRect, scale);
 
-			const auto tileEntity = makeTile(
+			const auto tileEntity = makeFloor(
 				m_reg,
 				tileSprite,
 				tileRect,
@@ -123,6 +144,29 @@ void Scene_Play::tileRender()
 	}
 }
 
+void Scene_Play::floorRender()
+{
+	const auto floorView = m_reg.view<CTile, CPosition, CScale, CSprite>();
+
+	for (const auto& tile : floorView)
+	{
+		auto& pos = floorView.get<CPosition>(tile).pos;
+		auto& scale = floorView.get<CScale>(tile).scale;
+		auto& sprite = floorView.get<CSprite>(tile).id;
+		auto& texRect = floorView.get<CSprite>(tile).texRect;
+		sprite.setTextureRect(texRect);
+		sprite.setOrigin(
+			sf::Vector2f(
+				sprite.getTextureRect().getSize().x / 2.f, 
+				sprite.getTextureRect().getSize().y / 2.f
+			)
+		);
+		sprite.setScale(scale);
+		sprite.setPosition(pos);
+		m_game->window().draw(sprite);
+	}
+}
+
 void Scene_Play::update()
 {
 	sRender();
@@ -161,13 +205,14 @@ void Scene_Play::sDoAction(const Action& action)
 			// Example entities array
 			json entities = json::array();
 
-			auto allView = m_reg.view<CPosition, CTile>();
+			auto allView = m_reg.view<CPosition, CTile, CName>();
 			for (const auto& entity : allView)
 			{
 				auto& pos = allView.get<CPosition>(entity).pos;
+				auto& name = allView.get<CName>(entity).name;
 				auto gridPos = pixelToGrid(pos);
 				std::cout << "Entity at position ( " << pos.x << ", " << pos.y << " )\n";
-				entities.push_back({ {"type", "floor"}, {"x", gridPos.x}, {"y", gridPos.y} });
+				entities.push_back({ {"type", name}, {"x", gridPos.x}, {"y", gridPos.y} });
 			}
 			levelData["entities"] = entities;
 
@@ -196,6 +241,8 @@ void Scene_Play::sRender()
 	// color the background darker so you know that the game is paused
 	if (!m_paused) { m_game->window().clear(sf::Color(100, 100, 255)); }
 	else { m_game->window().clear(sf::Color(50, 50, 150)); }
+
+	floorRender();
 
 	tileRender();
 
