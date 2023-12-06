@@ -48,7 +48,7 @@ void Scene_Menu::sRender()
 
 	// Render level names
 	sf::Text choiceText;
-	auto& menuFont = m_game->getAssets().getFont("Neoteric-32A8");
+	auto& menuFont = m_game->getAssets().getFont("arial");
 	choiceText.setFont(menuFont);
 	choiceText.setCharacterSize(24);
 	float textSpacing = 30.f;
@@ -80,6 +80,9 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	// Constructor implementation
 	// You may initialize any member variables or perform other necessary actions here
 	m_title = "Crawler";
+
+	m_menuStrings = { "Level 1", "Level 2", "Level 3" };
+
 	init();
 }
 
@@ -91,9 +94,7 @@ void Scene_Menu::init()
 	registerAction(sf::Keyboard::S, "DOWN");		// Go DOWN in menu
 	registerAction(sf::Keyboard::D, "SELECT");		// Toggle drawing (G)rid
 
-	m_menuStrings = {"PLAY", "LOAD", "QUIT"};
-
-	auto& menuFont = m_game->getAssets().getFont("Neoteric-32A8");
+	auto& menuFont = m_game->getAssets().getFont("AboveDemoRegular-lJMd");
 	m_menuText.setFont(menuFont);
 	m_menuText.setString(m_title);
 	m_menuText.setFillColor(sf::Color::Black);

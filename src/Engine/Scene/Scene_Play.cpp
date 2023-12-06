@@ -7,6 +7,16 @@ Scene_Play::Scene_Play(GameEngine* gameEngine)
 	init();
 }
 
+sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect)
+{
+	auto posX = gridX * entityRect.getSize().x;
+	auto posY = gridY * entityRect.getSize().y;
+	auto midX = posX + entityRect.getSize().x / 2.f;
+	auto midY = posY + entityRect.getSize().y / 2.f;
+
+	return sf::Vector2f(midX, midY);
+}
+
 void Scene_Play::init()
 {
 	registerAction(sf::Keyboard::Escape, "QUIT");
@@ -23,18 +33,34 @@ void Scene_Play::createLevel()
 	auto& playerTexture = m_game->getAssets().getTexture("players blue x1");
 	playerSprite.setTexture(playerTexture);
 	sf::IntRect playerRect = { 0, 0, 32, 32 };
-	//playerSprite.setTextureRect(playerRect);
 
 	const auto playerEntity = makePlayer(m_reg, playerSprite, playerRect);
 
-	sf::Sprite tileSprite;
-	auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
-	tileSprite.setTexture(tileTexture);
-	sf::IntRect tileRect = { 34 * 32, 1 * 32, 32, 32 };
-	sf::Vector2f tilePos = { 300.f, 300.f };
+	for (float i = 0; i < 3; i++)
+	{
+		sf::Sprite tileSprite;
+		auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
+		tileSprite.setTexture(tileTexture);
+		sf::IntRect tileRect = { 34 * 32, 1 * 32, 32, 32 };
+		sf::Vector2f tilePos = { i * 1, 0.f };
+		auto midPixelPos = gridToMidPixel(tilePos.x, tilePos.y, tileRect);
 
-	const auto tileEntity = makeTile(m_reg, tileSprite, tileRect, tilePos);
+		const auto tileEntity = makeTile(
+			m_reg,
+			tileSprite,
+			tileRect,
+			midPixelPos
+		);
+	}
+
 	std::cout << "Created Level with new Player \n";
+
+	std::ifstream input("../../../../data/saves/level1.json");
+	json data = json::parse(input);
+	std::cout << "Reading json data\n";
+	std::cout << "width is : " << data["width"] << "\n";
+	std::cout << "height is : " << data["height"] << "\n";
+	std::cout << "entities is : " << data["entities"] << "\n";
 }
 
 void Scene_Play::playerRender()
@@ -51,8 +77,8 @@ void Scene_Play::playerRender()
 		auto& texRect = playerView.get<CSprite>(player).texRect;
 		sprite.setTextureRect(texRect);
 		sprite.setOrigin(box.halfSize);
-		sprite.setPosition(pos);
 		sprite.setScale(scale);
+		sprite.setPosition(pos);
 		m_game->window().draw(sprite);
 	}
 }
@@ -70,8 +96,8 @@ void Scene_Play::tileRender()
 		auto& texRect = tileView.get<CSprite>(tile).texRect;
 		sprite.setTextureRect(texRect);
 		sprite.setOrigin(box.halfSize);
+		//sprite.setScale(scale);
 		sprite.setPosition(pos);
-		sprite.setScale(scale);
 		m_game->window().draw(sprite);
 	}
 }

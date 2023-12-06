@@ -28,6 +28,12 @@ FetchContent_Declare(EnTT
     GIT_TAG v3.12.2)  # Specify the desired tag or commit
 FetchContent_MakeAvailable(EnTT)
 
+FetchContent_Declare(json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG v3.11.3
+)  # Specify the desired tag or commit
+FetchContent_MakeAvailable(json)
+
 # Debug info on where the binary directory is
 message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 
@@ -35,7 +41,7 @@ message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 add_executable(${projectName} src/main.cpp  "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp" "src/Engine/Scene/Scene_Play.cpp" "src/core/Factories.cpp")
 
 # Link the executable against SFML and EnTT libraries
-target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT)
+target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT nlohmann_json::nlohmann_json)
 
 # Set the C++ standard to C++17 for the "flappy" target
 target_compile_features(${projectName} PRIVATE cxx_std_17)

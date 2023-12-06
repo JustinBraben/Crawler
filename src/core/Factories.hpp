@@ -20,4 +20,6 @@
 entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect);
 entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 
+void makeRoom(entt::registry& reg, sf::Sprite& sprite, sf::Vector2f& startingPos);
+
 #endif // !FACTORIES_HPP

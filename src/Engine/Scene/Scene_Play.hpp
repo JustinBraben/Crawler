@@ -1,6 +1,12 @@
 #ifndef SCENE_PLAY_HPP
 #define SCENE_PLAY_HPP
 
+#include <fstream>
+#include <iostream>
+
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 #include "Scene.hpp"
 
 #include "../../core/Factories.hpp"
@@ -27,6 +33,8 @@ protected:
 public:
 
 	Scene_Play(GameEngine* gameEngine);
+
+	sf::Vector2f gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect);
 
 	void update() override;
 	void onEnd() override;

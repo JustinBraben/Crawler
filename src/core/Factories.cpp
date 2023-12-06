@@ -51,3 +51,8 @@ entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& text
 
 	return tile;
 }
+
+void makeRoom(entt::registry& reg, sf::Sprite& sprite, sf::Vector2f& startingPos)
+{
+	// TODO: Create a room of entities
+}

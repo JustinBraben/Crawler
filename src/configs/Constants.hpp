@@ -1,9 +1,9 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-constexpr float width = 1280.f;
+constexpr float width = 1536.f;
 
-constexpr float height = 600.f;
+constexpr float height = 1024.f;
 
 constexpr auto assetsLoadPath = "../../../../assets";
 
