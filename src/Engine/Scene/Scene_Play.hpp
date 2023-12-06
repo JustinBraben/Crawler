@@ -29,7 +29,7 @@ protected:
 	void init();
 
 	void createLevel();
-	void loadTextureRects();
+	void loadTextureRects(std::string& filePath);
 	void exportLevelToJson(std::string& filePath);
 
 	void playerRender();

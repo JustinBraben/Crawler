@@ -35,7 +35,8 @@ void Scene_Play::init()
 	registerAction(sf::Keyboard::A, "MOVE_LEFT");
 	registerAction(sf::Keyboard::D, "MOVE_RIGHT");
 
-	loadTextureRects();
+	std::string textureRectsPath = "../../../../data/saves/level1.json";
+	loadTextureRects(textureRectsPath);
 
 	createLevel();
 }
@@ -112,9 +113,9 @@ void Scene_Play::createLevel()
 	std::cout << "entities is : " << data["entities"] << "\n";*/
 }
 
-void Scene_Play::loadTextureRects()
+void Scene_Play::loadTextureRects(std::string& filePath)
 {
-	std::ifstream input("../../../../src/configs/level1.json");
+	std::ifstream input(filePath);
 	if (!input.is_open())
 	{
 		std::cout << "Failed to open the file.\n";
@@ -142,10 +143,10 @@ void Scene_Play::loadTextureRects()
 					std::cout << "Loading texture rect named : " << textureRect["name"] << "\n";
 					std::map<std::string, sf::IntRect> intRectMap;
 					intRectMap[textureRect["name"]] = sf::IntRect(
-						textureRect["x"] * gameTileSizeX,
-						textureRect["y"] * gameTileSizeY,
-						textureRect["width"],
-						textureRect["height"]
+						static_cast<int>(textureRect["x"] * gameTileSizeX),
+						static_cast<int>(textureRect["y"] * gameTileSizeY),
+						static_cast<int>(textureRect["width"]),
+						static_cast<int>(textureRect["height"])
 					);
 
 					m_textureRectMap[textureName][textureRect["name"]] = intRectMap[textureRect["name"]];
@@ -189,10 +190,10 @@ void Scene_Play::exportLevelToJson(std::string& filePath)
 			textureRectArray.push_back(
 				{
 					{ "name", textureRectName },
-					{ "x", textureIntRect.left / gameTileSizeX },
-					{ "y", textureIntRect.top / gameTileSizeY },
-					{ "width", textureIntRect.width },
-					{ "height", textureIntRect.height }
+					{ "x",		static_cast<int>(textureIntRect.left / gameTileSizeX) },
+					{ "y",		static_cast<int>(textureIntRect.top / gameTileSizeY) },
+					{ "width",	static_cast<int>(textureIntRect.width) },
+					{ "height", static_cast<int>(textureIntRect.height) }
 				}
 			);
 		}
