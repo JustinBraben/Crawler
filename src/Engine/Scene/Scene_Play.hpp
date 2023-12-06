@@ -34,7 +34,9 @@ public:
 
 	Scene_Play(GameEngine* gameEngine);
 
-	sf::Vector2f gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect);
+	sf::Vector2f gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect, sf::Vector2f& scale);
+
+	sf::Vector2i pixelToGrid(sf::Vector2f& pos);
 
 	void update() override;
 	void onEnd() override;

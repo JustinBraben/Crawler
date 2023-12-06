@@ -1,6 +1,6 @@
 #include "Factories.hpp"
 
-entt::entity makePlayer(entt::registry &reg, sf::Sprite &sprite, sf::IntRect& textureRect)
+entt::entity makePlayer(entt::registry &reg, sf::Sprite &sprite, sf::IntRect& textureRect, sf::Vector2f& pos)
 {
 
 	sf::Vector2f size = sf::Vector2f(
@@ -19,7 +19,7 @@ entt::entity makePlayer(entt::registry &reg, sf::Sprite &sprite, sf::IntRect& te
 
 	const entt::entity player = reg.create();
 	reg.emplace<CPlayer>(player);
-	reg.emplace<CPosition>(player, sf::Vector2f(200, 200));
+	reg.emplace<CPosition>(player, pos);
 	reg.emplace<CVelocity>(player, velocity);
 	reg.emplace<CBoundingBox>(player, size, halfSize);
 	reg.emplace<CSprite>(player, sprite, textureRect);

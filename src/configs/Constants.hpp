@@ -13,6 +13,9 @@ constexpr float textureTileSizeY = 32.f;
 constexpr float gameTileSizeX = 128.f;
 constexpr float gameTileSizeY = 128.f;
 
+constexpr float scaleX = gameTileSizeX / textureTileSizeX;
+constexpr float scaleY = gameTileSizeY / textureTileSizeY;
+
 constexpr float playerSpawnX = width / 2.0f;
 
 constexpr float playerSpawnY = height / 2.0f;

@@ -7,19 +7,28 @@ Scene_Play::Scene_Play(GameEngine* gameEngine)
 	init();
 }
 
-sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect)
+sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect, sf::Vector2f& scale)
 {
-	auto posX = gridX * entityRect.getSize().x;
-	auto posY = gridY * entityRect.getSize().y;
-	auto midX = posX + entityRect.getSize().x / 2.f;
-	auto midY = posY + entityRect.getSize().y / 2.f;
+	auto posX = gridX * entityRect.getSize().x * scale.x;
+	auto posY = gridY * entityRect.getSize().y * scale.y;
+	auto midX = posX + entityRect.getSize().x * scale.x / 2.f;
+	auto midY = posY + entityRect.getSize().y * scale.y / 2.f;
 
 	return sf::Vector2f(midX, midY);
+}
+
+sf::Vector2i Scene_Play::pixelToGrid(sf::Vector2f& pos)
+{
+	// TODO: map pixel to grid
+	auto tilePositionX = static_cast<int>(std::floor(pos.x / gameTileSizeX));
+	auto tilePositionY = static_cast<int>(std::trunc(pos.y / gameTileSizeY));
+	return sf::Vector2i(tilePositionX, tilePositionY);
 }
 
 void Scene_Play::init()
 {
 	registerAction(sf::Keyboard::Escape, "QUIT");
+	registerAction(sf::Keyboard::P, "EXPORT");
 
 	createLevel();
 }
@@ -33,34 +42,46 @@ void Scene_Play::createLevel()
 	auto& playerTexture = m_game->getAssets().getTexture("players blue x1");
 	playerSprite.setTexture(playerTexture);
 	sf::IntRect playerRect = { 0, 0, 32, 32 };
+	sf::Vector2f playerPos = { 3.f, 3.f };
+	sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+	auto midPixelPlayerPos = gridToMidPixel(playerPos.x, playerPos.y, playerRect, scale);
 
-	const auto playerEntity = makePlayer(m_reg, playerSprite, playerRect);
+	const auto playerEntity = makePlayer(
+		m_reg, 
+		playerSprite, 
+		playerRect, 
+		midPixelPlayerPos
+	);
 
-	for (float i = 0; i < 3; i++)
+	for (float i = 0; i < 4; i++)
 	{
-		sf::Sprite tileSprite;
-		auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
-		tileSprite.setTexture(tileTexture);
-		sf::IntRect tileRect = { 34 * 32, 1 * 32, 32, 32 };
-		sf::Vector2f tilePos = { i * 1, 0.f };
-		auto midPixelPos = gridToMidPixel(tilePos.x, tilePos.y, tileRect);
+		for (float j = 0; j < 4; j++)
+		{
+			sf::Sprite tileSprite;
+			auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
+			tileSprite.setTexture(tileTexture);
+			sf::IntRect tileRect = { 34 * 32, 1 * 32, 32, 32 };
+			sf::Vector2f tilePos = { i * 1, j * 1 };
+			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+			auto midPixelPos = gridToMidPixel(tilePos.x, tilePos.y, tileRect, scale);
 
-		const auto tileEntity = makeTile(
-			m_reg,
-			tileSprite,
-			tileRect,
-			midPixelPos
-		);
+			const auto tileEntity = makeTile(
+				m_reg,
+				tileSprite,
+				tileRect,
+				midPixelPos
+			);
+		}
 	}
 
 	std::cout << "Created Level with new Player \n";
 
-	std::ifstream input("../../../../data/saves/level1.json");
+	/*std::ifstream input("../../../../data/saves/level1.json");
 	json data = json::parse(input);
 	std::cout << "Reading json data\n";
 	std::cout << "width is : " << data["width"] << "\n";
 	std::cout << "height is : " << data["height"] << "\n";
-	std::cout << "entities is : " << data["entities"] << "\n";
+	std::cout << "entities is : " << data["entities"] << "\n";*/
 }
 
 void Scene_Play::playerRender()
@@ -96,7 +117,7 @@ void Scene_Play::tileRender()
 		auto& texRect = tileView.get<CSprite>(tile).texRect;
 		sprite.setTextureRect(texRect);
 		sprite.setOrigin(box.halfSize);
-		//sprite.setScale(scale);
+		sprite.setScale(scale);
 		sprite.setPosition(pos);
 		m_game->window().draw(sprite);
 	}
@@ -128,6 +149,41 @@ void Scene_Play::sDoAction(const Action& action)
 	
 	if (action.type() == "END")
 	{
+		if (action.name() == "EXPORT")
+		{
+
+			json levelData;
+
+			// Populate the JSON object with your data
+			levelData["width"] = 24;
+			levelData["height"] = 24;
+
+			// Example entities array
+			json entities = json::array();
+
+			auto allView = m_reg.view<CPosition, CTile>();
+			for (const auto& entity : allView)
+			{
+				auto& pos = allView.get<CPosition>(entity).pos;
+				auto gridPos = pixelToGrid(pos);
+				std::cout << "Entity at position ( " << pos.x << ", " << pos.y << " )\n";
+				entities.push_back({ {"type", "floor"}, {"x", gridPos.x}, {"y", gridPos.y} });
+			}
+			levelData["entities"] = entities;
+
+			// Convert JSON object to string for writing to a file
+			std::string jsonString = levelData.dump(4); // Use pretty printing with an indentation of 4 spaces
+
+			// Print the JSON string
+			std::cout << jsonString << "\n";
+
+			// Write JSON string to a file
+			std::ofstream outputFile("../../../../data/saves/level1.json");
+			outputFile << jsonString;
+			outputFile.close();
+
+			std::cout << "Exporting entities to json\n";
+		}
 		if (action.name() == "QUIT")
 		{
 			onEnd();
@@ -141,9 +197,9 @@ void Scene_Play::sRender()
 	if (!m_paused) { m_game->window().clear(sf::Color(100, 100, 255)); }
 	else { m_game->window().clear(sf::Color(50, 50, 150)); }
 
-	playerRender();
-
 	tileRender();
+
+	playerRender();
 
 	m_game->window().display();
 }

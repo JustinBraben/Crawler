@@ -17,7 +17,7 @@
 
 #include <entt/entity/registry.hpp>
 
-entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect);
+entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 
 void makeRoom(entt::registry& reg, sf::Sprite& sprite, sf::Vector2f& startingPos);

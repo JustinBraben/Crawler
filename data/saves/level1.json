@@ -1,8 +1,86 @@
 {
-  "width": 24,
-  "height": 24,
-  "entities": [
-    {"type": "floor", "x":  1, "y":  1},
-    {"type": "floor", "x":  2, "y":  2}
-  ]
+    "entities": [
+        {
+            "type": "floor",
+            "x": 3,
+            "y": 3
+        },
+        {
+            "type": "floor",
+            "x": 3,
+            "y": 2
+        },
+        {
+            "type": "floor",
+            "x": 3,
+            "y": 1
+        },
+        {
+            "type": "floor",
+            "x": 3,
+            "y": 0
+        },
+        {
+            "type": "floor",
+            "x": 2,
+            "y": 3
+        },
+        {
+            "type": "floor",
+            "x": 2,
+            "y": 2
+        },
+        {
+            "type": "floor",
+            "x": 2,
+            "y": 1
+        },
+        {
+            "type": "floor",
+            "x": 2,
+            "y": 0
+        },
+        {
+            "type": "floor",
+            "x": 1,
+            "y": 3
+        },
+        {
+            "type": "floor",
+            "x": 1,
+            "y": 2
+        },
+        {
+            "type": "floor",
+            "x": 1,
+            "y": 1
+        },
+        {
+            "type": "floor",
+            "x": 1,
+            "y": 0
+        },
+        {
+            "type": "floor",
+            "x": 0,
+            "y": 3
+        },
+        {
+            "type": "floor",
+            "x": 0,
+            "y": 2
+        },
+        {
+            "type": "floor",
+            "x": 0,
+            "y": 1
+        },
+        {
+            "type": "floor",
+            "x": 0,
+            "y": 0
+        }
+    ],
+    "height": 24,
+    "width": 24
 }
