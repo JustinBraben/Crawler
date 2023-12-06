@@ -29,8 +29,11 @@ protected:
 	void init();
 
 	void createLevel();
+	void loadLevel(std::string& filePath);
 	void loadTextureRects(std::string& filePath);
+	void loadEntities(std::string& filePath);
 	void exportLevelToJson(std::string& filePath);
+	json getJsonContents(std::string& filePath);
 
 	void playerRender();
 	void tileRender();

@@ -77,6 +77,30 @@ entt::entity makeFloor(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& tex
 	return floor;
 }
 
+entt::entity makeFloor(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos, std::string& name)
+{
+	sf::Vector2f size = sf::Vector2f(
+		static_cast<float>(textureRect.getSize().x),
+		static_cast<float>(textureRect.getSize().y)
+	);
+
+	sf::Vector2f halfSize = sf::Vector2f(
+		static_cast<float>(textureRect.getSize().x / 2.f),
+		static_cast<float>(textureRect.getSize().y / 2.f)
+	);
+
+	sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+
+	const entt::entity floor = reg.create();
+	reg.emplace<CName>(floor, name);
+	reg.emplace<CPosition>(floor, pos);
+	reg.emplace<CTile>(floor);
+	reg.emplace<CSprite>(floor, sprite, textureRect);
+	reg.emplace<CScale>(floor, scale);
+
+	return floor;
+}
+
 void makeRoom(entt::registry& reg, sf::Sprite& sprite, sf::Vector2f& startingPos)
 {
 	// TODO: Create a room of entities

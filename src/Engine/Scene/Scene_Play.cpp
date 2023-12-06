@@ -65,18 +65,18 @@ void Scene_Play::createLevel()
 	{
 		for (float j = 0; j < 4; j++)
 		{
-			sf::Sprite floorSprite;
-			auto& floorTexture = m_game->getAssets().getTexture("tileset x1");
-			floorSprite.setTexture(floorTexture);
-			sf::IntRect floorRect = { 5 * 32, 0 * 32, 32, 32 };
-			sf::Vector2f floorPos = { i * 1, j * 1 };
+			sf::Sprite tileSprite;
+			auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
+			tileSprite.setTexture(tileTexture);
+			sf::IntRect tileRect = { 5 * 32, 0 * 32, 32, 32 };
+			sf::Vector2f tilePos = { i * 1, j * 1 };
 			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
-			auto midPixelPos = gridToMidPixel(floorPos.x, floorPos.y, floorRect, scale);
+			auto midPixelPos = gridToMidPixel(tilePos.x, tilePos.y, tileRect, scale);
 
-			const auto floorEntity = makeTile(
+			const auto tileEntity = makeTile(
 				m_reg,
-				floorSprite,
-				floorRect,
+				tileSprite,
+				tileRect,
 				midPixelPos
 			);
 		}
@@ -86,19 +86,20 @@ void Scene_Play::createLevel()
 	{
 		for (float j = 4; j < 8; j++)
 		{
-			sf::Sprite tileSprite;
-			auto& tileTexture = m_game->getAssets().getTexture("tileset x1");
-			tileSprite.setTexture(tileTexture);
-			sf::IntRect tileRect = { 34 * 32, 1 * 32, 32, 32 };
-			sf::Vector2f tilePos = { i * 1, j * 1 };
+			sf::Sprite floorSprite;
+			auto& floorTexture = m_game->getAssets().getTexture("tileset x1");
+			floorSprite.setTexture(floorTexture);
+			sf::IntRect floorRect = { 34 * 32, 1 * 32, 32, 32 };
+			sf::Vector2f floorPos = { i * 1, j * 1 };
 			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
-			auto midPixelPos = gridToMidPixel(tilePos.x, tilePos.y, tileRect, scale);
+			auto midPixelPos = gridToMidPixel(floorPos.x, floorPos.y, floorRect, scale);
 
-			const auto tileEntity = makeFloor(
+			const auto floorEntity = makeFloor(
 				m_reg,
-				tileSprite,
-				tileRect,
-				midPixelPos
+				floorSprite,
+				floorRect,
+				midPixelPos,
+				std::string("floor1")
 			);
 		}
 	}
@@ -111,6 +112,13 @@ void Scene_Play::createLevel()
 	std::cout << "width is : " << data["width"] << "\n";
 	std::cout << "height is : " << data["height"] << "\n";
 	std::cout << "entities is : " << data["entities"] << "\n";*/
+}
+
+void Scene_Play::loadLevel(std::string& filePath)
+{
+	loadTextureRects(filePath);
+
+	loadEntities(filePath);
 }
 
 void Scene_Play::loadTextureRects(std::string& filePath)
@@ -143,10 +151,10 @@ void Scene_Play::loadTextureRects(std::string& filePath)
 					std::cout << "Loading texture rect named : " << textureRect["name"] << "\n";
 					std::map<std::string, sf::IntRect> intRectMap;
 					intRectMap[textureRect["name"]] = sf::IntRect(
-						static_cast<int>(textureRect["x"] * gameTileSizeX),
-						static_cast<int>(textureRect["y"] * gameTileSizeY),
-						static_cast<int>(textureRect["width"]),
-						static_cast<int>(textureRect["height"])
+						static_cast<int>(textureRect["x"].get<int>() * gameTileSizeX),
+						static_cast<int>(textureRect["y"].get<int>() * gameTileSizeY),
+						static_cast<int>(textureRect["width"].get<int>()),
+						static_cast<int>(textureRect["height"].get<int>())
 					);
 
 					m_textureRectMap[textureName][textureRect["name"]] = intRectMap[textureRect["name"]];
@@ -154,6 +162,44 @@ void Scene_Play::loadTextureRects(std::string& filePath)
 			}
 		}
 	}
+}
+
+void Scene_Play::loadEntities(std::string& filePath)
+{
+	// TODO: 
+	// Read json file contents
+	json jsonData = getJsonContents(filePath);
+	
+	if (jsonData.contains("entities") && jsonData["entities"].is_array())
+	{
+		for (const auto& entity : jsonData["entities"])
+		{
+			if (entity["type"] == "floor1")
+			{
+
+				/*sf::Sprite floorSprite;
+				auto& floorTexture = m_game->getAssets().getTexture("tileset x1");
+				floorSprite.setTexture(floorTexture);
+				sf::IntRect floorRect = { 34 * 32, 1 * 32, 32, 32 };
+				sf::Vector2f floorPos = { entity["x"], entity["y"]};
+				sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+				auto midPixelPos = gridToMidPixel(floorPos.x, floorPos.y, floorRect, scale);
+
+				const auto floorEntity = makeFloor(
+					m_reg,
+					floorSprite,
+					floorRect,
+					midPixelPos,
+					std::string("floor1")
+				);*/
+			}
+		}
+	}
+
+	
+	// Look for entities
+	// Iterate through entities
+	// create them based on their parameters
 }
 
 void Scene_Play::exportLevelToJson(std::string& filePath)
@@ -220,6 +266,19 @@ void Scene_Play::exportLevelToJson(std::string& filePath)
 	outputFile.close();
 
 	std::cout << "Exporting entities to json\n";
+}
+
+json Scene_Play::getJsonContents(std::string& filePath)
+{
+	std::ifstream input(filePath);
+	if (!input.is_open())
+	{
+		std::cout << "Failed to open the file.\n";
+	}
+	json jsonData;
+	input >> jsonData;
+	input.close();
+	return jsonData;
 }
 
 void Scene_Play::playerRender()
