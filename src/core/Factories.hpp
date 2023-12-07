@@ -19,6 +19,14 @@
 #include <entt/entity/registry.hpp>
 
 entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
+entt::entity makePlayer(
+	entt::registry& reg, 
+	sf::Sprite& sprite, 
+	sf::IntRect& textureRect, 
+	sf::Vector2f& pos,
+	std::string& name,
+	std::string& textureName
+);
 entt::entity makeTile(
 	entt::registry& reg, 
 	sf::Sprite& sprite, 

@@ -39,8 +39,6 @@ void Scene_Play::init()
 
 	loadTextureRects(levelPath);
 
-	//createLevel();
-
 	loadLevel(levelPath);
 }
 
@@ -122,6 +120,18 @@ void Scene_Play::loadEntities(std::string& filePath)
 			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
 			auto midPixelPos = gridToMidPixel(spritePos.x, spritePos.y, textureRect, scale);
 
+			if (name.rfind("player", 0) == 0)
+			{
+				const auto player = makePlayer(
+					m_reg,
+					sprite,
+					textureRect,
+					midPixelPos,
+					name,
+					textureKey
+				);
+			}
+
 			// Check if the start of the entity name starts with 'floor'
 			if (name.rfind("floor", 0) == 0)
 			{
@@ -174,16 +184,18 @@ void Scene_Play::exportLevelToJson(std::string& filePath)
 	// Example entities array
 	json entities = json::array();
 
-	auto allView = m_reg.view<CPosition, CTile, CName, CSprite>();
+	auto allView = m_reg.view<CPosition, CName, CSprite>();
 	for (const auto& entity : allView)
 	{
 		auto& pos = allView.get<CPosition>(entity).pos;
 		auto& name = allView.get<CName>(entity).name;
 		auto& sprite = allView.get<CSprite>(entity).id;
+		auto& textureName = allView.get<CSprite>(entity).textureName;;
 		auto gridPos = pixelToGrid(pos);
 		entities.push_back(
 			{ 
 				{"type", name},
+				{"texture", textureName},
 				{"x", gridPos.x}, 
 				{"y", gridPos.y} 
 			}
@@ -203,8 +215,8 @@ void Scene_Play::exportLevelToJson(std::string& filePath)
 			textureRectArray.push_back(
 				{
 					{ "name", textureRectName },
-					{ "x",		static_cast<int>(textureIntRect.left / gameTileSizeX) },
-					{ "y",		static_cast<int>(textureIntRect.top / gameTileSizeY) },
+					{ "x",		static_cast<int>(textureIntRect.left / textureTileSizeX) },
+					{ "y",		static_cast<int>(textureIntRect.top / textureTileSizeY) },
 					{ "width",	static_cast<int>(textureIntRect.width) },
 					{ "height", static_cast<int>(textureIntRect.height) }
 				}

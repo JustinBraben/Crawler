@@ -28,6 +28,33 @@ entt::entity makePlayer(entt::registry &reg, sf::Sprite &sprite, sf::IntRect& te
 	return player;
 }
 
+entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos, std::string& name, std::string& textureName)
+{
+	sf::Vector2f size = sf::Vector2f(
+		static_cast<float>(textureRect.getSize().x),
+		static_cast<float>(textureRect.getSize().y)
+	);
+
+	sf::Vector2f halfSize = sf::Vector2f(
+		static_cast<float>(textureRect.getSize().x / 2.f),
+		static_cast<float>(textureRect.getSize().y / 2.f)
+	);
+
+	sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+
+	const entt::entity entity = reg.create();
+	reg.emplace<CPlayer>(entity);
+	reg.emplace<CName>(entity, name);
+	reg.emplace<CVelocity>(entity);
+	reg.emplace<CTile>(entity);
+	reg.emplace<CPosition>(entity, pos);
+	reg.emplace<CBoundingBox>(entity, size, halfSize);
+	reg.emplace<CSprite>(entity, sprite, textureRect, textureName);
+	reg.emplace<CScale>(entity, scale);
+
+	return entity;
+}
+
 
 entt::entity makeTile(
 	entt::registry& reg, 
