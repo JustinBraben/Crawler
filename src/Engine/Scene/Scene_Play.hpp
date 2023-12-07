@@ -28,7 +28,6 @@ protected:
 
 	void init();
 
-	void createLevel();
 	void loadLevel(std::string& filePath);
 	void loadTextureRects(std::string& filePath);
 	void loadEntities(std::string& filePath);

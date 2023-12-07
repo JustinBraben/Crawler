@@ -19,7 +19,6 @@
 #include <entt/entity/registry.hpp>
 
 entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
-entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 entt::entity makeTile(
 	entt::registry& reg, 
 	sf::Sprite& sprite, 
@@ -28,7 +27,6 @@ entt::entity makeTile(
 	std::string& name,
 	std::string& textureName
 );
-entt::entity makeFloor(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 entt::entity makeFloor(
 	entt::registry& reg,
 	sf::Sprite& sprite,
