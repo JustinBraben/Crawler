@@ -20,6 +20,7 @@ protected:
 	std::string m_currentScene;
 	SceneMap m_sceneMap;
 	bool m_running = true;
+	sf::View m_gameView;
 
 	void init();
 	void update();
@@ -33,11 +34,13 @@ public:
 
 	// change the current scene's string
 	void changeScene(const std::string& sceneName, std::shared_ptr<Scene> scene, bool endCurrentScene = false);
+	void setView(sf::View& view);
 
 	void quit();
 	void run();
 
 	sf::RenderWindow& window();
+	sf::View getView();
 	const Assets& getAssets() const;
 	bool isRunning();
 };

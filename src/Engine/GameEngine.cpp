@@ -15,6 +15,8 @@ void GameEngine::init()
 	m_window.create(sf::VideoMode(width, height), "Crawler");
 	m_window.setFramerateLimit(144);
 
+	m_gameView = (this)->window().getView();
+
 	changeScene("MENU", std::make_shared<Scene_Menu>(this));
 }
 
@@ -84,6 +86,11 @@ sf::RenderWindow& GameEngine::window()
 	return m_window;
 }
 
+sf::View GameEngine::getView()
+{
+	return m_gameView;
+}
+
 const Assets& GameEngine::getAssets() const
 {
 	return m_assets;
@@ -125,4 +132,9 @@ void GameEngine::changeScene(const std::string& sceneName, std::shared_ptr<Scene
 		//	m_sceneMap[sceneName]->setDelayMove();
 		//}
 	}
+}
+
+void GameEngine::setView(sf::View& view)
+{
+	m_gameView = view;
 }

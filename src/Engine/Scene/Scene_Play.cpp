@@ -20,7 +20,7 @@ sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, sf::IntRect& e
 sf::Vector2i Scene_Play::pixelToGrid(sf::Vector2f& pos)
 {
 	// TODO: map pixel to grid
-	auto tilePositionX = static_cast<int>(std::floor(pos.x / gameTileSizeX));
+	auto tilePositionX = static_cast<int>(std::trunc(pos.x / gameTileSizeX));
 	auto tilePositionY = static_cast<int>(std::trunc(pos.y / gameTileSizeY));
 	return sf::Vector2i(tilePositionX, tilePositionY);
 }
@@ -28,12 +28,20 @@ sf::Vector2i Scene_Play::pixelToGrid(sf::Vector2f& pos)
 void Scene_Play::init()
 {
 	registerAction(sf::Keyboard::Escape, "QUIT");
+	registerAction(sf::Keyboard::T, "TOGGLE_TEXTURE");		// Toggle drawing (T)extures
+	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");	// Toggle drawing (C)ollision Boxes
+	registerAction(sf::Keyboard::G, "TOGGLE_GRID");			// Toggle drawing (G)rid
 	registerAction(sf::Keyboard::P, "EXPORT");
 
 	registerAction(sf::Keyboard::W, "MOVE_UP");
 	registerAction(sf::Keyboard::S, "MOVE_DOWN");
 	registerAction(sf::Keyboard::A, "MOVE_LEFT");
 	registerAction(sf::Keyboard::D, "MOVE_RIGHT");
+
+	auto& gridFont = m_game->getAssets().getFont("arial");
+	m_gridText.setFont(gridFont);
+	m_gridText.setFillColor(sf::Color::Black);
+	m_gridText.setCharacterSize(12);
 
 	std::string levelPath = "../../../../data/saves/level1.json";
 
@@ -328,6 +336,55 @@ void Scene_Play::floorRender()
 	}
 }
 
+void Scene_Play::gridRender()
+{
+	auto& currentView = m_game->getView();
+
+	auto cameraLeft = currentView.getCenter().x - width / 2.f;
+	auto cameraTop = currentView.getCenter().y - height / 2.f;
+
+	auto cameraRight = cameraLeft + width;
+	auto cameraBottom = cameraTop + height;
+
+	sf::Vector2f gridStart = { cameraLeft, cameraTop };
+
+	auto startGridPos = pixelToGrid(gridStart);
+
+	for (float x = static_cast<float>(startGridPos.x * gameTileSizeX); x < cameraRight; x += gameTileSizeX)
+	{
+		drawLine(sf::Vector2f(x, cameraBottom), sf::Vector2f(x, cameraTop));
+	}
+
+	for (float y = static_cast<float>(startGridPos.y * gameTileSizeY); y < cameraBottom; y += gameTileSizeY)
+	{
+		drawLine(sf::Vector2f(cameraLeft, y), sf::Vector2f(cameraRight, y));
+		for (float x = static_cast<float>(startGridPos.x * gameTileSizeX); x < cameraRight; x += gameTileSizeX)
+		{
+			sf::Vector2f curPos = { x, y };
+			const auto& gridPos = pixelToGrid(curPos);
+			std::string xCell = std::to_string(static_cast<int>(gridPos.x));
+			std::string yCell = std::to_string(static_cast<int>(gridPos.y));
+			m_gridText.setString("(" + xCell + "," + yCell + ")");
+			m_gridText.setPosition(x + 3, y + 2);
+			m_gridText.setFillColor(sf::Color::White);
+			m_game->window().draw(m_gridText);
+		}
+	}
+}
+
+void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
+{
+	sf::VertexArray line(sf::Lines, 2);
+
+	line[0].position = sf::Vector2f(p1.x, p1.y); // Set the position of the first vertex
+	line[0].color = sf::Color::White; // Set the color of the first vertex
+
+	line[1].position = sf::Vector2f(p2.x, p2.y); // Set the position of the second vertex
+	line[1].color = sf::Color::White; // Set the color of the second vertex
+
+	m_game->window().draw(line);
+}
+
 void Scene_Play::update()
 {
 	sRender();
@@ -349,7 +406,10 @@ void Scene_Play::sDoAction(const Action& action)
 {
 	if (action.type() == "START") 
 	{
-
+		if (action.name() == "TOGGLE_GRID")
+		{
+			m_drawGrid = !m_drawGrid;
+		}
 	}
 	
 	if (action.type() == "END")
@@ -377,6 +437,11 @@ void Scene_Play::sRender()
 	tileRender();
 
 	playerRender();
+
+	if (m_drawGrid)
+	{
+		gridRender();
+	}
 
 	m_game->window().display();
 }
