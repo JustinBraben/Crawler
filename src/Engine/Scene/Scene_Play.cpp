@@ -39,9 +39,9 @@ void Scene_Play::init()
 
 	loadTextureRects(levelPath);
 
-	createLevel();
+	//createLevel();
 
-	//loadLevel(levelPath);
+	loadLevel(levelPath);
 }
 
 void Scene_Play::createLevel()
@@ -59,7 +59,7 @@ void Scene_Play::createLevel()
 
 	const auto playerEntity = makePlayer(
 		m_reg, 
-		playerSprite, 
+		std::move(playerSprite), 
 		playerRect, 
 		midPixelPlayerPos
 	);
@@ -93,12 +93,14 @@ void Scene_Play::createLevel()
 			std::string floorType = "floor1";
 			std::string textureKey = "tileset x1";
 			sf::Sprite floorSprite;
-			auto& floorTexture = m_game->getAssets().getTexture(textureKey);
+			const auto& floorTexture = m_game->getAssets().getTexture(textureKey);
 			floorSprite.setTexture(floorTexture);
 			sf::IntRect floorRect = { 34 * 32, 1 * 32, 32, 32 };
 			sf::Vector2f floorPos = { i * 1, j * 1 };
 			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
 			auto midPixelPos = gridToMidPixel(floorPos.x, floorPos.y, floorRect, scale);
+
+			std::cout << "midPixelPos is ( " << midPixelPos.x << ", " << midPixelPos.y << " )\n";
 
 			const auto floorEntity = makeFloor(
 				m_reg,
@@ -158,8 +160,8 @@ void Scene_Play::loadTextureRects(std::string& filePath)
 					std::cout << "Loading texture rect named : " << textureRect["name"] << "\n";
 					std::map<std::string, sf::IntRect> intRectMap;
 					intRectMap[textureRect["name"]] = sf::IntRect(
-						static_cast<int>(textureRect["x"].get<int>() * gameTileSizeX),
-						static_cast<int>(textureRect["y"].get<int>() * gameTileSizeY),
+						static_cast<int>(textureRect["x"].get<int>() * textureTileSizeX),
+						static_cast<int>(textureRect["y"].get<int>() * textureTileSizeY),
 						static_cast<int>(textureRect["width"].get<int>()),
 						static_cast<int>(textureRect["height"].get<int>())
 					);
@@ -176,6 +178,9 @@ void Scene_Play::loadEntities(std::string& filePath)
 	// TODO: 
 	// Read json file contents
 	json jsonData = getJsonContents(filePath);
+
+	// TODO: create some basic entities to render to the screen for now
+	m_reg.clear();
 	
 	if (jsonData.contains("entities") && jsonData["entities"].is_array())
 	{
@@ -186,7 +191,7 @@ void Scene_Play::loadEntities(std::string& filePath)
 			const auto& posX = static_cast<float>(entity["x"].get<float>());
 			const auto& posY = static_cast<float>(entity["y"].get<float>());
 			sf::Sprite sprite;
-			auto& texture = m_game->getAssets().getTexture(textureKey);
+			const auto& texture = m_game->getAssets().getTexture(textureKey);
 			sprite.setTexture(texture);
 			auto& textureRect = m_textureRectMap[textureKey][name];
 			sf::Vector2f spritePos = { 
@@ -196,26 +201,8 @@ void Scene_Play::loadEntities(std::string& filePath)
 			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
 			auto midPixelPos = gridToMidPixel(spritePos.x, spritePos.y, textureRect, scale);
 
-			/*std::string floorType = "floor1";
-			std::string textureKey = "tileset x1";
-			sf::Sprite floorSprite;
-			auto& floorTexture = m_game->getAssets().getTexture(textureKey);
-			floorSprite.setTexture(floorTexture);
-			sf::IntRect floorRect = { 34 * 32, 1 * 32, 32, 32 };
-			sf::Vector2f floorPos = { i * 1, j * 1 };
-			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
-			auto midPixelPos = gridToMidPixel(floorPos.x, floorPos.y, floorRect, scale);
-
-			const auto floorEntity = makeFloor(
-				m_reg,
-				floorSprite,
-				floorRect,
-				midPixelPos,
-				floorType,
-				textureKey
-			);*/
-
-			if (name._Starts_with("floor"))
+			// Check if the start of the entity name starts with 'floor'
+			if (name.rfind("floor", 0) == 0)
 			{
 				const auto floorEntity = makeFloor(
 					m_reg,
@@ -226,7 +213,8 @@ void Scene_Play::loadEntities(std::string& filePath)
 					textureKey
 				);
 			}
-			if (name._Starts_with("tile"))
+
+			if (name.rfind("wall", 0) == 0)
 			{
 				const auto tileEntity = makeTile(
 					m_reg,
@@ -240,6 +228,14 @@ void Scene_Play::loadEntities(std::string& filePath)
 		}
 	}
 
+	auto view = m_reg.view<CName, CPosition, CTile, CSprite, CScale>();
+
+	/*for (const auto& e : view)
+	{
+		auto& name = view.get<CName>(e).name;
+		auto& pos = view.get<CPosition>(e).pos;
+		std::cout << "Entity " << name << " at position ( " << pos.x << ", " << pos.y << " )\n";
+	}*/
 	
 	// Look for entities
 	// Iterate through entities
@@ -372,7 +368,7 @@ void Scene_Play::tileRender()
 
 void Scene_Play::floorRender()
 {
-	const auto floorView = m_reg.view<CTile, CPosition, CScale, CSprite>();
+	const auto floorView = m_reg.view<CTile, CName, CPosition, CScale, CSprite>();
 
 	for (const auto& tile : floorView)
 	{
@@ -380,6 +376,7 @@ void Scene_Play::floorRender()
 		auto& scale = floorView.get<CScale>(tile).scale;
 		auto& sprite = floorView.get<CSprite>(tile).id;
 		auto& texRect = floorView.get<CSprite>(tile).texRect;
+		auto& name = floorView.get<CName>(tile).name;
 		sprite.setTextureRect(texRect);
 		sprite.setOrigin(
 			sf::Vector2f(
@@ -390,6 +387,11 @@ void Scene_Play::floorRender()
 		sprite.setScale(scale);
 		sprite.setPosition(pos);
 		m_game->window().draw(sprite);
+
+		/*std::cout 
+			<< "Entity " << name 
+			<< " with textureName " << floorView.get<CSprite>(tile).textureName
+			<< " at position ( " << pos.x << ", " << pos.y << " )\n";*/
 	}
 }
 

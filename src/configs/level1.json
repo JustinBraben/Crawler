@@ -86,82 +86,82 @@
             "y": 4
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 3,
             "y": 3
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 3,
             "y": 2
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 3,
             "y": 1
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 3,
             "y": 0
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 2,
             "y": 3
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 2,
             "y": 2
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 2,
             "y": 1
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 2,
             "y": 0
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 1,
             "y": 3
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 1,
             "y": 2
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 1,
             "y": 1
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 1,
             "y": 0
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 0,
             "y": 3
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 0,
             "y": 2
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 0,
             "y": 1
           },
           {
-            "type": "tile",
+            "type": "wall1",
             "x": 0,
             "y": 0
           }
