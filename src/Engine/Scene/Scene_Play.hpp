@@ -11,6 +11,8 @@ using json = nlohmann::json;
 
 #include "../../core/Factories.hpp"
 
+#include "../../sys/Systems.hpp"
+
 #include "../Components/CBoundingBox.hpp"
 #include "../Components/CPosition.hpp"
 #include "../Components/CName.hpp"
@@ -26,6 +28,7 @@ protected:
 	bool m_drawGrid = false;
 	sf::Text m_gridText;
 	std::map<std::string, std::map<std::string, sf::IntRect>> m_textureRectMap;
+	Systems m_systems;
 
 	void init();
 

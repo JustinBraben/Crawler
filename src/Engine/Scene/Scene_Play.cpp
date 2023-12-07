@@ -387,6 +387,10 @@ void Scene_Play::drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2)
 
 void Scene_Play::update()
 {
+	// color the background darker so you know that the game is paused
+	if (!m_paused) { m_game->window().clear(sf::Color(100, 100, 255)); }
+	else { m_game->window().clear(sf::Color(50, 50, 150)); }
+
 	sRender();
 }
 
@@ -428,10 +432,6 @@ void Scene_Play::sDoAction(const Action& action)
 
 void Scene_Play::sRender()
 {
-	// color the background darker so you know that the game is paused
-	if (!m_paused) { m_game->window().clear(sf::Color(100, 100, 255)); }
-	else { m_game->window().clear(sf::Color(50, 50, 150)); }
-
 	floorRender();
 
 	tileRender();
