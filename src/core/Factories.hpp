@@ -20,8 +20,23 @@
 
 entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
 entt::entity makeTile(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
+entt::entity makeTile(
+	entt::registry& reg, 
+	sf::Sprite& sprite, 
+	sf::IntRect& textureRect, 
+	sf::Vector2f& pos,
+	std::string& name,
+	std::string& textureName
+);
 entt::entity makeFloor(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos);
-entt::entity makeFloor(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& textureRect, sf::Vector2f& pos, std::string& name);
+entt::entity makeFloor(
+	entt::registry& reg,
+	sf::Sprite& sprite,
+	sf::IntRect& textureRect,
+	sf::Vector2f& pos,
+	std::string& name,
+	std::string& textureName
+);
 
 void makeRoom(entt::registry& reg, sf::Sprite& sprite, sf::Vector2f& startingPos);
 
