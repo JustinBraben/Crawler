@@ -338,7 +338,7 @@ void Scene_Play::floorRender()
 
 void Scene_Play::gridRender()
 {
-	auto& currentView = m_game->getView();
+	auto currentView = m_game->getView();
 
 	auto cameraLeft = currentView.getCenter().x - width / 2.f;
 	auto cameraTop = currentView.getCenter().y - height / 2.f;
