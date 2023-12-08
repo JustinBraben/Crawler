@@ -1,0 +1,11 @@
+TODO:
+* Move Render to systems
+* Implement Tile editor system
+* Implement Camera (either as component, or seperate class)
+* Implement Animations
+* Add imgui for aid in Tile editor system
+* Implement BoundingBoxes for walls
+* Implement physics collision
+* Implement Health System
+* Implement Ammo System
+* Implement Reload System

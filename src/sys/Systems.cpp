@@ -12,8 +12,14 @@ Systems::Systems(GameEngine* gameEngine)
 {
 }
 
-void Systems::update(entt::registry& reg)
+Systems::Systems(GameEngine* gameEngine, sf::Text& gridText)
+	: m_game(gameEngine), m_gridText(gridText)
+{
+}
+
+void Systems::update(entt::registry& reg, bool drawGrid, sf::Text& gridText)
 {
 	sMovement(reg);
 	sAnimation(reg);
+	sRender(reg, m_game, drawGrid, m_gridText);
 }

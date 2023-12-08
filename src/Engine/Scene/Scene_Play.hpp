@@ -41,12 +41,6 @@ protected:
 	void exportLevelToJson(std::string& filePath);
 	json getJsonContents(std::string& filePath);
 
-	void playerRender();
-	void tileRender();
-	void floorRender();
-	void gridRender();
-
-	void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2);
 public:
 
 	Scene_Play(GameEngine* gameEngine);

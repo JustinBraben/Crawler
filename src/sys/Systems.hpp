@@ -12,10 +12,12 @@ class Systems
 {
 protected:
 	GameEngine* m_game = nullptr;
+	sf::Text m_gridText;
 public:
 	Systems();
 	Systems(GameEngine* gameEngine);
-	void update(entt::registry& reg);
+	Systems(GameEngine* gameEngine, sf::Text& gridText);
+	void update(entt::registry& reg, bool drawGrid, sf::Text& gridText);
 };
 
 #endif // !SYSTEMS_HPP
