@@ -4,7 +4,7 @@
 #include "Assets.hpp"
 #include "Scene/Scene_Menu.hpp"
 
-#include "../Configs/Constants.hpp"
+#include "../configs/Constants.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <entt/entity/registry.hpp>
