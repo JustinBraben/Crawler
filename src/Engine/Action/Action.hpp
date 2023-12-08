@@ -1,9 +1,13 @@
+#ifndef ACTION_HPP
+#define ACTION_HPP
+
 #include <string>
+#include <sstream>
 
 class Action {
 
-	std::string m_name = "NONE";
-	std::string m_type = "NONE";
+	std::string m_name = "NONE";	// Name of Action, eg. "MOVE_LEFT"
+	std::string m_type = "NONE";	// Start or end of Action, eg. "START", "END"
 
 public:
 
@@ -14,3 +18,5 @@ public:
 	const std::string& type() const;
 	std::string toString() const;
 };
+
+#endif // !ACTION_HPP

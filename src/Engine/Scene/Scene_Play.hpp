@@ -9,9 +9,9 @@ using json = nlohmann::json;
 
 #include "Scene.hpp"
 
-#include "../../core/Factories.hpp"
+#include "../../Core/Factories.hpp"
 
-#include "../../sys/Systems.hpp"
+#include "../../Sys/Systems.hpp"
 
 #include "../Components/CBoundingBox.hpp"
 #include "../Components/CEnemy.hpp"

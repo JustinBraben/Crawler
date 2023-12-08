@@ -18,6 +18,8 @@ protected:
 	GameEngine* m_game = nullptr;
 	entt::registry m_reg;
 	ActionMap m_actionMap;
+	ActionMap m_keyboardActionMap;
+	ActionMap m_MouseActionMap;
 	bool m_paused = false;
 	bool m_hasEnded = false;
 public:
@@ -31,9 +33,13 @@ public:
 	Scene(GameEngine* gameEngine);
 
 	void registerAction(int inputKey, const std::string& actionName);
+	void registerKeyboardAction(int inputKey, const std::string& actionName);
+	void registerMouseAction(int inputMouse, const std::string& actionName);
 
 	bool hasEnded() const;
 	const ActionMap& getActionMap() const;
+	const ActionMap& getKeyboardActionMap() const;
+	const ActionMap& getMouseActionMap() const;
 };
 
 #endif // !SCENE_HPP

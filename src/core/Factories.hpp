@@ -15,7 +15,7 @@
 #include "../Engine/Components/CTile.hpp"
 #include "../Engine/Components/CVelocity.hpp"
 
-#include "../configs/Constants.hpp"
+#include "../Configs/Constants.hpp"
 
 #include <entt/entity/registry.hpp>
 

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <filesystem>
+#include <iostream>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio/Sound.hpp>

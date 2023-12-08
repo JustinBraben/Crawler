@@ -1,8 +1,7 @@
 #ifndef SYSTEMS_HPP
 #define SYSTEMS_HPP
 
-#include "sMovement.hpp"
-#include "sAnimation.hpp"
+#include "sAllSystems.hpp"
 
 #include <entt/entity/fwd.hpp>
 

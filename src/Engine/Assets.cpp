@@ -1,5 +1,4 @@
 #include "Assets.hpp"
-#include <iostream>
 
 Assets::Assets()
 {
@@ -111,7 +110,7 @@ void Assets::loadTexturesFromPath(std::string& folderPath)
 			}
 		}
 	}
-	else 
+	else
 	{
 		std::cerr << "Directory not found." << "\n";
 	}
