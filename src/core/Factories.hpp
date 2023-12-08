@@ -6,6 +6,7 @@
 
 #include "../Engine/Components/CBoundingBox.hpp"
 #include "../Engine/Components/CEnemy.hpp"
+#include "../Engine/Components/CInput.hpp"
 #include "../Engine/Components/CName.hpp"
 #include "../Engine/Components/CPlayer.hpp"
 #include "../Engine/Components/CPosition.hpp"

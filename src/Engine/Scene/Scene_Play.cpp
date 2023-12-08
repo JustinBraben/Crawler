@@ -414,6 +414,46 @@ void Scene_Play::sDoAction(const Action& action)
 		{
 			m_drawGrid = !m_drawGrid;
 		}
+
+		if (action.name() == "MOVE_LEFT")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.left = true;
+			}
+		}
+
+		if (action.name() == "MOVE_RIGHT")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.right = true;
+			}
+		}
+
+		if (action.name() == "MOVE_UP")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.up = true;
+			}
+		}
+
+		if (action.name() == "MOVE_DOWN")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.down = true;
+			}
+		}
 	}
 	
 	if (action.type() == "END")
@@ -423,6 +463,47 @@ void Scene_Play::sDoAction(const Action& action)
 			std::string levelPath = "../../../../data/saves/level1.json";
 			exportLevelToJson(levelPath);
 		}
+
+		if (action.name() == "MOVE_LEFT")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.left = false;
+			}
+		}
+
+		if (action.name() == "MOVE_RIGHT")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.right = false;
+			}
+		}
+
+		if (action.name() == "MOVE_UP")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.up = false;
+			}
+		}
+
+		if (action.name() == "MOVE_DOWN")
+		{
+			const auto& playerView = m_reg.view<CInput, CPlayer>();
+			for (const auto& entity : playerView)
+			{
+				auto& input = playerView.get<CInput>(entity);
+				input.down = false;
+			}
+		}
+
 		if (action.name() == "QUIT")
 		{
 			onEnd();

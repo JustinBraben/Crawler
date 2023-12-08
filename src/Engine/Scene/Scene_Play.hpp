@@ -14,8 +14,11 @@ using json = nlohmann::json;
 #include "../../sys/Systems.hpp"
 
 #include "../Components/CBoundingBox.hpp"
-#include "../Components/CPosition.hpp"
+#include "../Components/CEnemy.hpp"
+#include "../Components/CInput.hpp"
 #include "../Components/CName.hpp"
+#include "../Components/CPlayer.hpp"
+#include "../Components/CPosition.hpp"
 #include "../Components/CScale.hpp"
 #include "../Components/CSprite.hpp"
 #include "../Components/CTile.hpp"

@@ -44,6 +44,7 @@ entt::entity makePlayer(entt::registry& reg, sf::Sprite& sprite, sf::IntRect& te
 
 	const entt::entity entity = reg.create();
 	reg.emplace<CPlayer>(entity);
+	reg.emplace<CInput>(entity);
 	reg.emplace<CName>(entity, name);
 	reg.emplace<CVelocity>(entity);
 	reg.emplace<CTile>(entity);
