@@ -1,9 +1,5 @@
-#ifndef SMOVEMENT_HPP
-#define SMOVEMENT_HPP
-
-#include <algorithm>
-
-#include "../configs/Constants.hpp"
+#ifndef SSAMPLESYSTEM_HPP
+#define SSAMPLESYSTEM_HPP
 
 #include "../Engine/Components/CInput.hpp"
 #include "../Engine/Components/CPosition.hpp"
@@ -11,6 +7,6 @@
 
 #include <entt/entity/fwd.hpp>
 
-void sMovement(entt::registry& reg);
+void sSampleSystem(entt::registry& reg);
 
-#endif // !SMOVEMENT_HPP
+#endif // !SSAMPLESYSTEM_HPP

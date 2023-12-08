@@ -1,174 +1,204 @@
 {
-  "entities": {
-    "textures": [
-      {
-        "texture": "tileset x1",
-        "entity": [
-          {
-            "type": "floor1",
-            "x": 7,
-            "y": 7
-          },
-          {
-            "type": "floor1",
-            "x": 7,
-            "y": 6
-          },
-          {
-            "type": "floor1",
-            "x": 7,
-            "y": 5
-          },
-          {
-            "type": "floor1",
-            "texture": "tileset x1",
-            "x": 7,
-            "y": 4
-          },
-          {
-            "type": "floor1",
-            "x": 6,
-            "y": 7
-          },
-          {
-            "type": "floor1",
-            "x": 6,
-            "y": 6
-          },
-          {
-            "type": "floor1",
-            "x": 6,
-            "y": 5
-          },
-          {
-            "type": "floor1",
-            "x": 6,
-            "y": 4
-          },
-          {
-            "type": "floor1",
-            "x": 5,
-            "y": 7
-          },
-          {
-            "type": "floor1",
-            "x": 5,
-            "y": 6
-          },
-          {
-            "type": "floor1",
-            "x": 5,
-            "y": 5
-          },
-          {
-            "type": "floor1",
-            "x": 5,
-            "y": 4
-          },
-          {
-            "type": "floor1",
-            "x": 4,
-            "y": 7
-          },
-          {
-            "type": "floor1",
-            "x": 4,
-            "y": 6
-          },
-          {
-            "type": "floor1",
-            "x": 4,
-            "y": 5
-          },
-          {
-            "type": "floor1",
-            "x": 4,
-            "y": 4
-          },
-          {
-            "type": "wall1",
-            "x": 3,
-            "y": 3
-          },
-          {
-            "type": "wall1",
-            "x": 3,
-            "y": 2
-          },
-          {
-            "type": "wall1",
-            "x": 3,
-            "y": 1
-          },
-          {
-            "type": "wall1",
-            "x": 3,
-            "y": 0
-          },
-          {
-            "type": "wall1",
-            "x": 2,
-            "y": 3
-          },
-          {
-            "type": "wall1",
-            "x": 2,
-            "y": 2
-          },
-          {
-            "type": "wall1",
-            "x": 2,
-            "y": 1
-          },
-          {
-            "type": "wall1",
-            "x": 2,
-            "y": 0
-          },
-          {
-            "type": "wall1",
-            "x": 1,
-            "y": 3
-          },
-          {
-            "type": "wall1",
-            "x": 1,
-            "y": 2
-          },
-          {
-            "type": "wall1",
-            "x": 1,
-            "y": 1
-          },
-          {
-            "type": "wall1",
-            "x": 1,
-            "y": 0
-          },
-          {
-            "type": "wall1",
-            "x": 0,
-            "y": 3
-          },
-          {
-            "type": "wall1",
-            "x": 0,
-            "y": 2
-          },
-          {
-            "type": "wall1",
-            "x": 0,
-            "y": 1
-          },
-          {
-            "type": "wall1",
-            "x": 0,
-            "y": 0
-          }
-        ]
-      }
-    ]
-  },
+  "entities": [
+    {
+      "texture": "players blue x1",
+      "type": "player1",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 7
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 7
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 7
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 7
+    }
+  ],
   "height": 24,
   "textures": [
     {
@@ -262,6 +292,49 @@
           "width": 32,
           "x": 8,
           "y": 0
+        }
+      ]
+    }
+  ],
+  "animations": [
+    {
+      "texture": "players blue x1",
+      "animationType": "idle",
+      "animationFrames": [
+        {
+          "textureRects": [
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "texture": "players blue x1",
+      "animationType": "talk",
+      "animationFrames": [
+        {
+          "textureRects": [
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 0,
+              "y": 1
+            },
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 1,
+              "y": 1
+            }
+          ]
         }
       ]
     }

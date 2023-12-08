@@ -20,12 +20,16 @@ constexpr float playerSpawnX = width / 2.0f;
 
 constexpr float playerSpawnY = height / 2.0f;
 
-constexpr float playerMaxVelocityY = 2.f;
+constexpr float playerAccelerationX = 0.1f;
 
-constexpr float playerMinVelocityY = -2.f;
+constexpr float playerAccelerationY = 0.1f;
 
-constexpr float playerMaxVelocityX = 2.f;
+constexpr float playerMaxVelocityY = 3.f;
 
-constexpr float playerMinVelocityX = -2.f;
+constexpr float playerMinVelocityY = -3.f;
+
+constexpr float playerMaxVelocityX = 3.f;
+
+constexpr float playerMinVelocityX = -3.f;
 
 #endif // !CONSTANTS_HPP

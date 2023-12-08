@@ -391,6 +391,8 @@ void Scene_Play::update()
 	if (!m_paused) { m_game->window().clear(sf::Color(100, 100, 255)); }
 	else { m_game->window().clear(sf::Color(50, 50, 150)); }
 
+	m_systems.update(m_reg);
+
 	sRender();
 }
 
