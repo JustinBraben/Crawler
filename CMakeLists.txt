@@ -38,7 +38,7 @@ FetchContent_MakeAvailable(json)
 message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 
 # Create an executable target named "flappy" with the source file src/main.cpp
-add_executable(${projectName} src/main.cpp  "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp" "src/Engine/Scene/Scene_Play.cpp" "src/core/Factories.cpp" "src/sys/Systems.cpp" "src/sys/sMovement.cpp" "src/sys/sAnimation.cpp" "src/sys/sSampleSystem.cpp" "src/Sys/sRender.cpp")
+add_executable(${projectName} src/main.cpp  "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp" "src/Engine/Scene/Scene_Play.cpp" "src/Core/Factories.cpp" "src/Sys/Systems.cpp" "src/Sys/sMovement.cpp" "src/Sys/sAnimation.cpp" "src/Sys/sSampleSystem.cpp" "src/Sys/sRender.cpp")
 
 # Link the executable against SFML and EnTT libraries
 target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT nlohmann_json::nlohmann_json)
