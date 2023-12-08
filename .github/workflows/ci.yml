@@ -38,6 +38,10 @@ jobs:
       shell: bash
       run: cmake -S . -B build -DCMAKE_INSTALL_PREFIX=install ${{matrix.platform.flags}} ${{matrix.config.flags}}
 
+    - name: Clean
+      shell: bash
+      run: cmake --build build --target clean
+
     - name: Build
       shell: bash
       run: cmake --build build --config Release
