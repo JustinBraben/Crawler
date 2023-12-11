@@ -1,0 +1,300 @@
+{
+  "entities": [
+    {
+      "texture": "players blue x1",
+      "type": "player1",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 0,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 2,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 0
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 1
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 2
+    },
+    {
+      "texture": "tileset x1",
+      "type": "wall1",
+      "x": 3,
+      "y": 3
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 4,
+      "y": 7
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 5,
+      "y": 7
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 6,
+      "y": 7
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 4
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 5
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 6
+    },
+    {
+      "texture": "tileset x1",
+      "type": "floor1",
+      "x": 7,
+      "y": 7
+    }
+  ],
+  "height": 24,
+  "textures": [
+    {
+      "texture": "players blue x1",
+      "textureRects": [
+        {
+          "height": 32,
+          "name": "player1",
+          "width": 32,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "texture": "tileset x1",
+      "textureRects": [
+        {
+          "height": 32,
+          "name": "floor1",
+          "width": 32,
+          "x": 34,
+          "y": 1
+        },
+        {
+          "height": 32,
+          "name": "floor2",
+          "width": 32,
+          "x": 33,
+          "y": 1
+        },
+        {
+          "height": 32,
+          "name": "floor3",
+          "width": 32,
+          "x": 32,
+          "y": 1
+        },
+        {
+          "height": 32,
+          "name": "floor4",
+          "width": 32,
+          "x": 32,
+          "y": 2
+        },
+        {
+          "height": 32,
+          "name": "wall1",
+          "width": 32,
+          "x": 2,
+          "y": 0
+        },
+        {
+          "height": 32,
+          "name": "wall2",
+          "width": 32,
+          "x": 3,
+          "y": 0
+        },
+        {
+          "height": 32,
+          "name": "wall3",
+          "width": 32,
+          "x": 4,
+          "y": 0
+        },
+        {
+          "height": 32,
+          "name": "wall4",
+          "width": 32,
+          "x": 5,
+          "y": 0
+        },
+        {
+          "height": 32,
+          "name": "wall5",
+          "width": 32,
+          "x": 6,
+          "y": 0
+        },
+        {
+          "height": 32,
+          "name": "wall6",
+          "width": 32,
+          "x": 7,
+          "y": 0
+        },
+        {
+          "height": 32,
+          "name": "wall7",
+          "width": 32,
+          "x": 8,
+          "y": 0
+        }
+      ]
+    }
+  ],
+  "width": 24
+}

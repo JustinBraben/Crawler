@@ -81,8 +81,6 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	// You may initialize any member variables or perform other necessary actions here
 	m_title = "Crawler";
 
-	m_menuStrings = { "Level 1", "Level 2", "Level 3" };
-
 	init();
 }
 
@@ -94,10 +92,29 @@ void Scene_Menu::init()
 	registerAction(sf::Keyboard::S, "DOWN");		// Go DOWN in menu
 	registerAction(sf::Keyboard::D, "SELECT");		// Toggle drawing (G)rid
 
+	// TODO: load menu strings
+	std::filesystem::path assetsPath(savesPath);
+
+	loadMenuPaths(savesPath);
+
 	auto& menuFont = m_game->getAssets().getFont("AboveDemoRegular-lJMd");
 	m_menuText.setFont(menuFont);
 	m_menuText.setString(m_title);
 	m_menuText.setFillColor(sf::Color::Black);
 	m_menuText.setCharacterSize(64);
 	m_menuText.setPosition(10, 10);  // Adjust the position as needed
+}
+
+void Scene_Menu::loadMenuPaths(const std::filesystem::path& folderPath)
+{
+	for (auto& entry : std::filesystem::directory_iterator(folderPath))
+	{
+		auto filePath = entry.path();
+		auto extension = filePath.extension().string();
+		if (extension == ".json")
+		{
+			auto stem = filePath.stem().string();
+			m_menuStrings.push_back(stem);
+		}
+	}
 }

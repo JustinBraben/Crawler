@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <deque>
+#include <filesystem>
 
 #include <entt/entity/registry.hpp>
 #include <SFML/Graphics.hpp>
@@ -19,6 +20,7 @@ protected:
 	size_t m_selectedMenuIndex = 0;
 
 	void init();
+	void loadMenuPaths(const std::filesystem::path& folderPath);
 
 public:
 	void onEnd() override;

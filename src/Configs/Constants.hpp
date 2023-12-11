@@ -6,6 +6,7 @@ constexpr float width = 1536.f;
 constexpr float height = 1024.f;
 
 constexpr auto assetsLoadPath = "../../../../assets";
+constexpr auto savesPath = "../../../../data/saves";
 
 constexpr float textureTileSizeX = 32.f;
 constexpr float textureTileSizeY = 32.f;
