@@ -7,6 +7,8 @@ void sRender(entt::registry& reg, GameEngine* gameEngine, bool drawGrid, sf::Tex
 {
 	gameEngine->window().clear(sf::Color(100, 100, 255));
 
+	sCamera(reg, gameEngine);
+
 	sFloorRender(reg, gameEngine);
 
 	sWallRender(reg, gameEngine);
@@ -91,7 +93,7 @@ void sPlayerRender(entt::registry& reg, GameEngine* gameEngine)
 
 void sGridRender(entt::registry& reg, GameEngine* gameEngine, sf::Text& gridText)
 {
-	auto currentView = gameEngine->getView();
+	auto currentView = gameEngine->window().getView();
 
 	auto cameraLeft = currentView.getCenter().x - width / 2.f;
 	auto cameraTop = currentView.getCenter().y - height / 2.f;
@@ -123,6 +125,43 @@ void sGridRender(entt::registry& reg, GameEngine* gameEngine, sf::Text& gridText
 			gameEngine->window().draw(gridText);
 		}
 	}
+}
+
+void sCamera(entt::registry& reg, GameEngine* gameEngine)
+{
+	const auto playerView = reg.view<CPlayer, CBoundingBox, CPosition, CScale, CSprite>();
+
+	for (const auto& player : playerView)
+	{
+		sf::View gameView = gameEngine->window().getView();
+
+		auto cameraCenterX = gameView.getCenter().x;
+		auto cameraCenterY = gameView.getCenter().y;
+
+		auto cameraLeftX = gameView.getCenter().x - (static_cast<float>(gameEngine->window().getSize().x) / 2.f);
+		auto cameraTopY = gameView.getCenter().y + (static_cast<float>(gameEngine->window().getSize().y) / 2.f);
+
+		auto cameraRightX = cameraLeftX + gameEngine->window().getSize().x;
+		auto cameraBottomY = cameraTopY - gameEngine->window().getSize().y;
+
+		auto& pos = playerView.get<CPosition>(player).pos;
+
+		// Define the speed at which the camera follows the player
+		float followSpeed = 0.02f;
+
+		// Use lerp to smoothly interpolate between the current camera position and the player position
+		cameraCenterX = smoothCameraFollow(cameraCenterX, pos.x, followSpeed);
+		cameraCenterY = smoothCameraFollow(cameraCenterY, pos.y, followSpeed);
+
+		gameView.setCenter(cameraCenterX, cameraCenterY);
+		gameEngine->window().setView(gameView);
+	}
+}
+
+// Linear interpolation function
+float smoothCameraFollow(float x, float y, float adjust)
+{
+	return (1 - adjust) * x + adjust * y;
 }
 
 sf::Vector2i pixelToGrid(sf::Vector2f& pos)

@@ -30,6 +30,10 @@ void sPlayerRender(entt::registry& reg, GameEngine* gameEngine);
 
 void sGridRender(entt::registry& reg, GameEngine* gameEngine, sf::Text& gridText);
 
+void sCamera(entt::registry& reg, GameEngine* gameEngine);
+
+float smoothCameraFollow(float x, float y, float adjust);
+
 sf::Vector2i pixelToGrid(sf::Vector2f& pos);
 
 void drawLine(const sf::Vector2f& p1, const sf::Vector2f& p2, GameEngine* gameEngine);
