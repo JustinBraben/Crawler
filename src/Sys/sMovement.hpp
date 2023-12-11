@@ -3,7 +3,7 @@
 
 #include <algorithm>
 
-#include "../configs/Constants.hpp"
+#include "../Configs/Constants.hpp"
 
 #include "../Engine/Components/CInput.hpp"
 #include "../Engine/Components/CPosition.hpp"
