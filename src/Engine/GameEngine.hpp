@@ -6,6 +6,9 @@
 
 #include "../Configs/Constants.hpp"
 
+#include <imgui.h>
+#include <imgui-SFML.h>
+
 #include <SFML/Graphics.hpp>
 #include <entt/entity/registry.hpp>
 #include <iostream>

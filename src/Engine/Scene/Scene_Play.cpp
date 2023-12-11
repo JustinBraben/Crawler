@@ -7,6 +7,12 @@ Scene_Play::Scene_Play(GameEngine* gameEngine)
 	init();
 }
 
+Scene_Play::Scene_Play(GameEngine* gameEngine, const std::filesystem::path& filePath)
+	: Scene(gameEngine)
+{
+	init(filePath);
+}
+
 sf::Vector2f Scene_Play::gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect, sf::Vector2f& scale)
 {
 	auto posX = gridX * entityRect.getSize().x * scale.x;
@@ -52,14 +58,80 @@ void Scene_Play::init()
 	m_systems = Systems(m_game, m_gridText);
 }
 
+void Scene_Play::init(const std::filesystem::path& filePath)
+{
+	registerKeyboardAction(sf::Keyboard::Escape, "QUIT");
+	registerKeyboardAction(sf::Keyboard::T, "TOGGLE_TEXTURE");
+	registerKeyboardAction(sf::Keyboard::C, "TOGGLE_COLLISION");
+	registerKeyboardAction(sf::Keyboard::G, "TOGGLE_GRID");
+	registerKeyboardAction(sf::Keyboard::P, "EXPORT");
+
+	registerKeyboardAction(sf::Keyboard::W, "MOVE_UP");
+	registerKeyboardAction(sf::Keyboard::S, "MOVE_DOWN");
+	registerKeyboardAction(sf::Keyboard::A, "MOVE_LEFT");
+	registerKeyboardAction(sf::Keyboard::D, "MOVE_RIGHT");
+
+	loadTextureRects(filePath);
+
+	loadLevel(filePath);
+
+	m_systems = Systems(m_game, m_gridText);
+}
+
 void Scene_Play::loadLevel(std::string& filePath)
 {
-	//loadTextureRects(filePath);
+	loadEntities(filePath);
+}
 
+void Scene_Play::loadLevel(const std::filesystem::path& filePath)
+{
 	loadEntities(filePath);
 }
 
 void Scene_Play::loadTextureRects(std::string& filePath)
+{
+	std::ifstream input(filePath);
+	if (!input.is_open())
+	{
+		std::cout << "Failed to open the file.\n";
+	}
+	json jsonData;
+	input >> jsonData;
+	input.close();
+
+	std::cout << jsonData["textures"] << "\n";
+
+	if (jsonData.contains("textures") && jsonData["textures"].is_array())
+	{
+		for (const auto& texture : jsonData["textures"])
+		{
+			const auto& textureName = texture["texture"];
+			const auto& textureRects = texture["textureRects"];
+
+			std::cout << "Loading texture named : " << textureName << "\n";
+
+			if (textureRects.is_array())
+			{
+
+				for (const auto& textureRect : textureRects)
+				{
+					std::cout << "Loading texture rect named : " << textureRect["name"] << "\n";
+					std::map<std::string, sf::IntRect> intRectMap;
+					intRectMap[textureRect["name"]] = sf::IntRect(
+						static_cast<int>(textureRect["x"].get<int>() * textureTileSizeX),
+						static_cast<int>(textureRect["y"].get<int>() * textureTileSizeY),
+						static_cast<int>(textureRect["width"].get<int>()),
+						static_cast<int>(textureRect["height"].get<int>())
+					);
+
+					m_textureRectMap[textureName][textureRect["name"]] = intRectMap[textureRect["name"]];
+				}
+			}
+		}
+	}
+}
+
+void Scene_Play::loadTextureRects(const std::filesystem::path& filePath)
 {
 	std::ifstream input(filePath);
 	if (!input.is_open())
@@ -181,6 +253,72 @@ void Scene_Play::loadEntities(std::string& filePath)
 	// Look for entities
 	// Iterate through entities
 	// create them based on their parameters
+}
+
+void Scene_Play::loadEntities(const std::filesystem::path& filePath)
+{
+	json jsonData = getJsonContents(filePath.string());
+
+	// TODO: create some basic entities to render to the screen for now
+	m_reg.clear();
+
+	if (jsonData.contains("entities") && jsonData["entities"].is_array())
+	{
+		for (const auto& entity : jsonData["entities"])
+		{
+			std::string name = entity["type"].get<std::string>();
+			std::string textureKey = entity["texture"].get<std::string>();
+			const auto& posX = static_cast<float>(entity["x"].get<float>());
+			const auto& posY = static_cast<float>(entity["y"].get<float>());
+			sf::Sprite sprite;
+			const auto& texture = m_game->getAssets().getTexture(textureKey);
+			sprite.setTexture(texture);
+			auto& textureRect = m_textureRectMap[textureKey][name];
+			sf::Vector2f spritePos = {
+				posX,
+				posY
+			};
+			sf::Vector2f scale = { gameTileSizeX / textureTileSizeX, gameTileSizeY / textureTileSizeY };
+			auto midPixelPos = gridToMidPixel(spritePos.x, spritePos.y, textureRect, scale);
+
+			if (name.rfind("player", 0) == 0)
+			{
+				const auto player = makePlayer(
+					m_reg,
+					sprite,
+					textureRect,
+					midPixelPos,
+					name,
+					textureKey
+				);
+			}
+
+			// Check if the start of the entity name starts with 'floor'
+			if (name.rfind("floor", 0) == 0)
+			{
+				const auto floorEntity = makeFloor(
+					m_reg,
+					sprite,
+					textureRect,
+					midPixelPos,
+					name,
+					textureKey
+				);
+			}
+
+			if (name.rfind("wall", 0) == 0)
+			{
+				const auto tileEntity = makeTile(
+					m_reg,
+					sprite,
+					textureRect,
+					midPixelPos,
+					name,
+					textureKey
+				);
+			}
+		}
+	}
 }
 
 void Scene_Play::exportLevelToJson(std::string& filePath)

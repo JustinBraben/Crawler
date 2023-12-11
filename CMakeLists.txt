@@ -34,6 +34,18 @@ FetchContent_Declare(json
 )  # Specify the desired tag or commit
 FetchContent_MakeAvailable(json)
 
+FetchContent_Declare(ImGui
+    GIT_REPOSITORY https://github.com/ocornut/imgui
+    GIT_TAG v1.89.9)
+FetchContent_MakeAvailable(ImGui)
+FetchContent_GetProperties(ImGui SOURCE_DIR IMGUI_DIR)
+
+set(IMGUI_SFML_FIND_SFML OFF)
+FetchContent_Declare(ImGui-SFML
+    GIT_REPOSITORY https://github.com/SFML/imgui-sfml
+    GIT_TAG 2.6.x)
+FetchContent_MakeAvailable(ImGui-SFML)
+
 # Debug info on where the binary directory is
 message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 
@@ -41,7 +53,7 @@ message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 add_executable(${projectName} src/main.cpp  "src/Engine/GameEngine.cpp" "src/Engine/Assets.cpp" "src/Engine/Scene/Scene.cpp" "src/Engine/Scene/Scene_Menu.cpp" "src/Engine/Action/Action.cpp" "src/Engine/Scene/Scene_Play.cpp" "src/Core/Factories.cpp" "src/Sys/Systems.cpp" "src/Sys/sMovement.cpp" "src/Sys/sAnimation.cpp" "src/Sys/sSampleSystem.cpp" "src/Sys/sRender.cpp" "src/Engine/Animation.cpp")
 
 # Link the executable against SFML and EnTT libraries
-target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio EnTT::EnTT nlohmann_json::nlohmann_json)
+target_link_libraries(${projectName} PRIVATE sfml-graphics sfml-audio ImGui-SFML::ImGui-SFML EnTT::EnTT nlohmann_json::nlohmann_json)
 
 # Set the C++ standard to C++17 for the "flappy" target
 target_compile_features(${projectName} PRIVATE cxx_std_17)

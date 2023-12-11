@@ -33,7 +33,9 @@ void Scene_Menu::sDoAction(const Action& action)
 		}
 		if (action.name() == "SELECT")
 		{
-			auto newScenePlay = std::make_shared<Scene_Play>(m_game);
+			std::filesystem::path levelToLoad = savesPath;
+			levelToLoad.append(m_menuStrings[m_selectedMenuIndex] + ".json");
+			auto newScenePlay = std::make_shared<Scene_Play>(m_game, levelToLoad);
 			m_game->changeScene("PLAY_" + m_menuStrings[m_selectedMenuIndex], newScenePlay);
 		}
 	}
@@ -87,10 +89,10 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 void Scene_Menu::init()
 {
 	// TODO: Register actions for Scene_Menu
-	registerAction(sf::Keyboard::Escape, "QUIT");	// QUIT out of the game
-	registerAction(sf::Keyboard::W, "UP");			// Go UP in menu
-	registerAction(sf::Keyboard::S, "DOWN");		// Go DOWN in menu
-	registerAction(sf::Keyboard::D, "SELECT");		// Toggle drawing (G)rid
+	registerKeyboardAction(sf::Keyboard::Escape, "QUIT");	// QUIT out of the game
+	registerKeyboardAction(sf::Keyboard::W, "UP");			// Go UP in menu
+	registerKeyboardAction(sf::Keyboard::S, "DOWN");		// Go DOWN in menu
+	registerKeyboardAction(sf::Keyboard::D, "SELECT");		// Toggle drawing (G)rid
 
 	// TODO: load menu strings
 	std::filesystem::path assetsPath(savesPath);

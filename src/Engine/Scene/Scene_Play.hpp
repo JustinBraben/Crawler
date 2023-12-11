@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
@@ -35,16 +36,21 @@ protected:
 	Systems m_systems;
 
 	void init();
+	void init(const std::filesystem::path& filePath);
 
 	void loadLevel(std::string& filePath);
+	void loadLevel(const std::filesystem::path& filePath);
 	void loadTextureRects(std::string& filePath);
+	void loadTextureRects(const std::filesystem::path& filePath);
 	void loadEntities(std::string& filePath);
+	void loadEntities(const std::filesystem::path& filePath);
 	void exportLevelToJson(std::string& filePath);
 	json getJsonContents(std::string& filePath);
 
 public:
 
 	Scene_Play(GameEngine* gameEngine);
+	Scene_Play(GameEngine* gameEngine, const std::filesystem::path& filePath);
 
 	sf::Vector2f gridToMidPixel(float gridX, float gridY, sf::IntRect& entityRect, sf::Vector2f& scale);
 
