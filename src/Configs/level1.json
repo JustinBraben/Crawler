@@ -337,6 +337,44 @@
           ]
         }
       ]
+    },
+    {
+      "texture": "players blue x1",
+      "animationType": "run",
+      "animationFrames": [
+        {
+          "textureRects": [
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 0,
+              "y": 3
+            },
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 1,
+              "y": 3
+            },
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 2,
+              "y": 3
+            },
+            {
+              "height": 32,
+              "name": "player1",
+              "width": 32,
+              "x": 3,
+              "y": 3
+            }
+          ]
+        }
+      ]
     }
   ],
   "width": 24

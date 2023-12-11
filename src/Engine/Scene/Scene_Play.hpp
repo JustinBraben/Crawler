@@ -13,6 +13,7 @@ using json = nlohmann::json;
 
 #include "../../Sys/Systems.hpp"
 
+#include "../Components/CAnimation.hpp"
 #include "../Components/CBoundingBox.hpp"
 #include "../Components/CEnemy.hpp"
 #include "../Components/CInput.hpp"
